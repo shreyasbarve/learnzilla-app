@@ -33,4 +33,12 @@ yarn install
 expo start
 ```
 
+## Contributors ✨:
+
+<ul>
+  <li>Tejas Tapas</li>  
+  <li>Shreyas Barve</li>  
+  <li>Rishabh Rathi</li>
+  <li>Aditya Morankar</li>  
+</ul>
 
