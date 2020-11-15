@@ -28,9 +28,18 @@ export default function Home() {
   // get all classes
   const [loading, setLoading] = useState(true);
   const [allClassesData, setAllClassesData] = useState([]);
+  // const loadClasses = async () => {
+  //   try {
+  //     const res = await TeacherApi.allClasses();
+  //     setAllClassesData(res.data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const loadClasses = async () => {
     try {
-      const res = await TeacherApi.allClasses();
+      const res = await TeacherApi.class();
       setAllClassesData(res.data);
       setLoading(false);
     } catch (error) {
@@ -89,13 +98,20 @@ export default function Home() {
                   navigation.navigate("InClass", { classId: classData.id })
                 }
               >
-                <MyCard
+                {/* <MyCard
                   key={classData.id}
                   id={classData.id}
                   std={classData.username}
                   section={classData.email}
                   subject={classData.phone}
                   students={classData.website}
+                /> */}
+                <MyCard
+                  id={classData.id}
+                  std={classData.title}
+                  section={classData.date}
+                  subject={classData.assign_url}
+                  students={classData.classroom}
                 />
               </TouchableOpacity>
             ))}
