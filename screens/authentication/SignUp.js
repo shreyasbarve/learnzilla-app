@@ -1,4 +1,5 @@
 // core
+import { useNavigation } from "@react-navigation/native";
 import {
   Container,
   Header,
@@ -16,20 +17,22 @@ import {
   Content,
 } from "native-base";
 import React from "react";
-import { BackHandler } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+// import { BackHandler } from "react-native";
 
-export default function Login() {
+// components
+import Login from "./Login";
+
+export default function SignUp() {
   const navigation = useNavigation();
-
   return (
     <Container>
       <Header noLeft>
         <Body>
-          <Title>Login Page</Title>
+          <Title>SignUp Page</Title>
         </Body>
         <Right>
-          <Button transparent iconLeft onPress={() => BackHandler.exitApp()}>
+          {/* <Button transparent iconLeft onPress={() => BackHandler.exitApp()}> */}
+          <Button transparent iconLeft>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>
@@ -60,7 +63,17 @@ export default function Login() {
           }}
         >
           <Item stackedLabel>
+            <Label>Full Name</Label>
+            <Input />
+          </Item>
+
+          <Item stackedLabel>
             <Label>Email Address</Label>
+            <Input />
+          </Item>
+
+          <Item stackedLabel>
+            <Label>Mobile Number</Label>
             <Input />
           </Item>
 
@@ -70,12 +83,12 @@ export default function Login() {
           </Item>
 
           <Button
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("login")}
             iconRight
             rounded
             style={{ alignSelf: "center", marginTop: 40 }}
           >
-            <Text>Log In</Text>
+            <Text>Sign Up</Text>
           </Button>
         </Form>
       </Content>

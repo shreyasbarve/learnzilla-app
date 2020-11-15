@@ -25,38 +25,27 @@ export default function Home() {
   // navigation
   const navigation = useNavigation();
 
-  // get all classes
+  // if get all classes display
   const [loading, setLoading] = useState(true);
-  const [allClassesData, setAllClassesData] = useState([]);
-  // const loadClasses = async () => {
-  //   try {
-  //     const res = await TeacherApi.allClasses();
-  //     setAllClassesData(res.data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
+  // teacher login
+  const USER = "teacher";
+  var teacherData = {
+    email: "", // change this
+    name: "", // change this
+    use: USER, // user should be teacher
+  };
+
+  // get all classes
+  const [allClass, setAllClass] = useState([]);
   const loadClasses = async () => {
     try {
-      const res = await TeacherApi.class();
-      setAllClassesData(res.data);
+      const { data } = await TeacherApi.getClasses(teacherData);
+      setAllClass(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  // to add class
-  var initialState = {
-    email: "",
-    standard: "",
-    section: "",
-    subject: "",
-  };
-  const [addClassData, setaddClassData] = useState(initialState);
-  const addClass = () => {
-    // add class function
   };
 
   useEffect(() => {
@@ -72,15 +61,6 @@ export default function Home() {
       ) : (
         <Container>
           <Header>
-            <Left>
-              <Button
-                transparent
-                iconLeft
-                onPress={() => navigation.openDrawer()}
-              >
-                <Icon name="md-menu" />
-              </Button>
-            </Left>
             <Body>
               <Title>Home</Title>
             </Body>
@@ -91,27 +71,22 @@ export default function Home() {
             </Right>
           </Header>
           <Content>
-            {allClassesData.map((classData) => (
+            {allClass.map((classData) => (
               <TouchableOpacity
-                key={classData.id}
+                key={classData.classroom_id}
                 onPress={() =>
-                  navigation.navigate("InClass", { classId: classData.id })
+                  navigation.navigate("InClass", {
+                    classId: classData.classroom_id,
+                  })
                 }
               >
-                {/* <MyCard
-                  key={classData.id}
-                  id={classData.id}
-                  std={classData.username}
-                  section={classData.email}
-                  subject={classData.phone}
-                  students={classData.website}
-                /> */}
                 <MyCard
-                  id={classData.id}
-                  std={classData.title}
-                  section={classData.date}
-                  subject={classData.assign_url}
-                  students={classData.classroom}
+                  key={classData.classroom_id}
+                  id={classData.classroom_id}
+                  std={classData.standard}
+                  section={classData.section}
+                  subject={classData.subject}
+                  students={classData.strength}
                 />
               </TouchableOpacity>
             ))}
