@@ -4,7 +4,7 @@ import { AppLoading } from "expo";
 
 // Fonts
 import * as Font from "expo-font";
-import MainNavigator from "./routes/MainNavigator";
+import MainNavigator from "./src/routes/MainNavigator";
 
 const getFonts = async () =>
   await Font.loadAsync({
