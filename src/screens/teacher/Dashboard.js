@@ -22,17 +22,24 @@ import MyCard from "../../components/MyCard";
 // API
 import TeacherApi from "../../models/teacher/TeacherApi";
 
-export default function Dashboard() {
+export default function Dashboard({ route }) {
+  // route data
+  const tmail = route.params?.tmail ?? "";
+  const tkey = route.params?.tkey ?? "";
+  const tname = route.params?.tname ?? "";
+  const tphone = route.params?.tphone ?? "";
+  const imail = route.params?.imail ?? "";
+
   // navigation
   const navigation = useNavigation();
 
   // if get all classes display
   const [loading, setLoading] = useState(true);
 
-  // teacher login
+  // teacher data
   var teacherData = {
-    email: "",
-    name: "",
+    email: tmail,
+    name: tname,
     user: "teacher", // user should be teacher
   };
 
@@ -40,8 +47,8 @@ export default function Dashboard() {
   const [allClass, setAllClass] = useState([]);
   const loadClasses = async () => {
     try {
-      const { data } = await TeacherApi.getClasses(teacherData);
-      setAllClass(data);
+      const res = await TeacherApi.getClasses(teacherData);
+      setAllClass(res.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -81,73 +88,55 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* {loading ? (
+      {loading ? (
         <Container>
           <Spinner color="blue" />
+          <Button onPress={() => navigation.navigate("tclass")}>
+            <Text>InClass</Text>
+          </Button>
         </Container>
       ) : (
-            {allClass.map((classData) => (
-              <TouchableOpacity
-                key={classData.classroom_id}
-                onPress={() =>
-                  navigation.navigate("InClass", {
-                    classId: classData.classroom_id,
-                  })
-                }
-              >
-                <MyCard
+        <Container>
+          <Header>
+            <Left>
+              <Button transparent>
+                <Icon name="ios-exit" />
+              </Button>
+            </Left>
+            <Body>
+              <Title>Dashboard</Title>
+            </Body>
+            <Right>
+              <Button transparent hasText onPress={createClass}>
+                <Text>Add Class</Text>
+              </Button>
+            </Right>
+          </Header>
+          <Content>
+            <TouchableOpacity onPress={() => navigation.navigate("tclass")}>
+              {allClass.map((classData) => (
+                <TouchableOpacity
                   key={classData.classroom_id}
-                  id={classData.classroom_id}
-                  std={classData.standard}
-                  section={classData.section}
-                  subject={classData.subject}
-                  students={classData.strength}
-                />
-              </TouchableOpacity>
-            ))}
-      )} */}
-      <Container>
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="ios-exit" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Dashboard</Title>
-          </Body>
-          <Right>
-            <Button transparent hasText onPress={createClass}>
-              <Text>Add Class</Text>
-            </Button>
-          </Right>
-        </Header>
-        <Content>
-          <TouchableOpacity onPress={() => navigation.navigate("tclass")}>
-            <MyCard
-              id={1}
-              std={9}
-              section={"B"}
-              subject={"Maths"}
-              students={56}
-            />
-            <MyCard
-              id={1}
-              std={9}
-              section={"B"}
-              subject={"Maths"}
-              students={56}
-            />
-            <MyCard
-              id={1}
-              std={9}
-              section={"B"}
-              subject={"Maths"}
-              students={56}
-            />
-          </TouchableOpacity>
-        </Content>
-      </Container>
+                  onPress={() =>
+                    navigation.navigate("InClass", {
+                      classId: classData.classroom_id,
+                    })
+                  }
+                >
+                  <MyCard
+                    key={classData.classroom_id}
+                    id={classData.classroom_id}
+                    std={classData.standard}
+                    section={classData.section}
+                    subject={classData.subject}
+                    students={classData.strength}
+                  />
+                </TouchableOpacity>
+              ))}
+            </TouchableOpacity>
+          </Content>
+        </Container>
+      )}
     </>
   );
 }

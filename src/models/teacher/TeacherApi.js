@@ -28,7 +28,7 @@ const TeacherApi = {
     return await axios.get(`${CLASS_URL}/viewassignments/${classId}/`);
   },
   createAssignment: async (payload) => {
-    return await axios.get(`${CLASS_URL}/create-new-assign/`, payload);
+    return await axios.post(`${CLASS_URL}/create-new-assign/`, payload);
   },
 
   getMarks: async (classId) => {
