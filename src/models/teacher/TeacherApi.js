@@ -38,7 +38,7 @@ const TeacherApi = {
     return await axios.post(`${CLASS_URL}/addmarks/`, payload);
   },
 
-  getStudents: async (classId, payload) => {
+  getStudents: async (payload, classId) => {
     return await axios.post(`${CLASS_URL}/viewstudents/${classId}/`, payload);
   },
   addStudent: async (payload) => {

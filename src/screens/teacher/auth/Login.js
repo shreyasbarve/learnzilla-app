@@ -16,27 +16,33 @@ import {
   Content,
 } from "native-base";
 import React, { useState } from "react";
-// import { BackHandler } from "react-native";
+import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import TeacherApi from "../../models/teacher/TeacherApi";
-import axios from "axios";
+
+// API
+import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function Login() {
   const navigation = useNavigation();
 
+  // data for login
   const [teacherData, setTeacherData] = useState({
     email: "",
     password: "",
   });
 
-  const authenticateTeacher = async (e) => {
-    try {
-      console.log(teacherData);
-      const res1 = await TeacherApi.login(teacherData);
-      console.log(res1.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const loginTeacher = async (e) => {
+    // try {
+    //   const res1 = await TeacherApi.login(teacherData);
+    //   const res2 = await TeacherApi.getTeacherDetails({
+    //     email: res1.email,
+    //     key: res1.key,
+    //   });
+    //   navigation.navigate("thome");
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    navigation.navigate("thome");
   };
 
   return (
@@ -46,8 +52,7 @@ export default function Login() {
           <Title>Login Page</Title>
         </Body>
         <Right>
-          {/* <Button transparent iconLeft onPress={() => BackHandler.exitApp()}> */}
-          <Button transparent iconLeft>
+          <Button transparent iconLeft onPress={() => BackHandler.exitApp()}>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>
@@ -99,8 +104,7 @@ export default function Login() {
           </Item>
 
           <Button
-            onPress={authenticateTeacher}
-            iconRight
+            onPress={loginTeacher}
             rounded
             style={{ alignSelf: "center", marginTop: 40 }}
           >

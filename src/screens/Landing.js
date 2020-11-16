@@ -10,7 +10,7 @@ export default function Landing() {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("auth");
+      navigation.navigate("tauth");
     }, 500);
   }, []);
 

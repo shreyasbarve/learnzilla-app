@@ -16,14 +16,35 @@ import {
   Thumbnail,
   Content,
 } from "native-base";
-import React from "react";
-// import { BackHandler } from "react-native";
+import React, { useState } from "react";
+import { BackHandler } from "react-native";
 
-// components
-import Login from "./Login";
+// API
+import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function SignUp() {
+  // navigation
   const navigation = useNavigation();
+
+  // teacher data
+  const [teacherData, setTeacherData] = useState({
+    institution_email: "patna@gmail.com",
+    email: "",
+    name: "",
+    phone_number: "",
+    password: "",
+  });
+
+  // signup
+  const signUpTeacher = async () => {
+    try {
+      await TeacherApi.register(teacherData);
+    } catch (error) {
+      console.log(error);
+    }
+    navigation.navigate("tlogin");
+  };
+
   return (
     <Container>
       <Header noLeft>
@@ -31,8 +52,7 @@ export default function SignUp() {
           <Title>SignUp Page</Title>
         </Body>
         <Right>
-          {/* <Button transparent iconLeft onPress={() => BackHandler.exitApp()}> */}
-          <Button transparent iconLeft>
+          <Button transparent iconLeft onPress={() => BackHandler.exitApp()}>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>
@@ -64,27 +84,48 @@ export default function SignUp() {
         >
           <Item stackedLabel>
             <Label>Full Name</Label>
-            <Input />
+            <Input
+              keyboardType="default"
+              value={teacherData.name}
+              onChangeText={(e) => setTeacherData({ ...teacherData, name: e })}
+            />
           </Item>
 
           <Item stackedLabel>
             <Label>Email Address</Label>
-            <Input />
+            <Input
+              keyboardType="email-address"
+              value={teacherData.email}
+              onChangeText={(e) => setTeacherData({ ...teacherData, email: e })}
+            />
           </Item>
 
           <Item stackedLabel>
             <Label>Mobile Number</Label>
-            <Input />
+            <Input
+              keyboardType="phone-pad"
+              value={teacherData.phone_number}
+              maxLength={10}
+              onChangeText={(e) =>
+                setTeacherData({ ...teacherData, phone_number: e })
+              }
+            />
           </Item>
 
           <Item stackedLabel>
             <Label>Password</Label>
-            <Input />
+            <Input
+              keyboardType="default"
+              secureTextEntry={true}
+              value={teacherData.password}
+              onChangeText={(e) =>
+                setTeacherData({ ...teacherData, password: e })
+              }
+            />
           </Item>
 
           <Button
-            onPress={() => navigation.navigate("login")}
-            iconRight
+            onPress={signUpTeacher}
             rounded
             style={{ alignSelf: "center", marginTop: 40 }}
           >

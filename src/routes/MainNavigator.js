@@ -24,9 +24,9 @@ export default function MainNavigator() {
         initialRouteName="landing"
       >
         <Stack.Screen name="landing" component={Landing} />
-        <Stack.Screen name="auth" component={AuthTabs} />
-        <Stack.Screen name="home" component={HomeTabs} />
-        <Stack.Screen name="class" component={ClassTabs} />
+        <Stack.Screen name="tauth" component={AuthTabs} />
+        <Stack.Screen name="thome" component={HomeTabs} />
+        <Stack.Screen name="tclass" component={ClassTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

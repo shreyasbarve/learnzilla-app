@@ -3,7 +3,7 @@ import axios from "axios";
 const CLASS_URL = "https://learnzilla.herokuapp.com/classroom";
 const STUDENT_URL = "https://learnzilla.herokuapp.com/student";
 
-const TeacherApi = {
+const StudentApi = {
   // Login and Register
   register: async (payload) => {
     return await axios.post(`${STUDENT_URL}/register`, payload);
@@ -51,4 +51,4 @@ const TeacherApi = {
   },
 };
 
-export default studentAPI;
+export default StudentApi;
