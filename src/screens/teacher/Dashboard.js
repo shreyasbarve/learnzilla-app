@@ -31,8 +31,8 @@ export default function Dashboard() {
 
   // teacher data
   var teacherData = {
-    email: "",
-    name: "",
+    email: "teacher@gmail.com",
+    key: "1lcijN$1gEob<Xk",
     user: "teacher", // user should be teacher
   };
 
@@ -72,7 +72,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // loadClasses();
+    loadClasses();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
@@ -84,9 +84,6 @@ export default function Dashboard() {
       {loading ? (
         <Container>
           <Spinner color="blue" />
-          <Button onPress={() => navigation.navigate("tclass")}>
-            <Text>InClass</Text>
-          </Button>
         </Container>
       ) : (
         <Container>
