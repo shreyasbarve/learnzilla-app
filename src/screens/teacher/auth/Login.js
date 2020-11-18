@@ -34,15 +34,13 @@ export default function Login() {
   const loginTeacher = async (e) => {
     try {
       const res1 = await TeacherApi.login(teacherData);
-      console.log(res1.data);
       const res2 = await TeacherApi.getTeacherDetails({
         email: res1.data.email,
         key: res1.data.key,
       });
-      console.log(res2.data);
       navigation.navigate("thome");
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
