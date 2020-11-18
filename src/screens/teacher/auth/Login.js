@@ -33,27 +33,16 @@ export default function Login() {
 
   const loginTeacher = async (e) => {
     try {
-      // const res1 = await TeacherApi.login(teacherData);
-      // const res2 = await TeacherApi.getTeacherDetails({
-      //   email: res1.data.email,
-      //   key: res1.data.key,
-      // });
-      // navigation.navigate("thome", {
-      //   tmail: res1.data.email,
-      //   tkey: res1.data.key,
-      //   tname: res2.data.name,
-      //   tphone: res2.data.phone_number,
-      //   imail: resizeBy.data.institution_email,
-      // });
-      navigation.navigate("thome", {
-        tmail: "teacher@gmail.com",
-        tkey: "1lcijN$1gEob<Xk",
-        tname: "Teacher 1",
-        tphone: "0123456789",
-        imail: "patna@gmail.com",
+      const res1 = await TeacherApi.login(teacherData);
+      console.log(res1.data);
+      const res2 = await TeacherApi.getTeacherDetails({
+        email: res1.data.email,
+        key: res1.data.key,
       });
+      console.log(res2.data);
+      navigation.navigate("thome");
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
 

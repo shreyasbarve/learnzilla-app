@@ -22,14 +22,7 @@ import MyCard from "../../components/MyCard";
 // API
 import TeacherApi from "../../models/teacher/TeacherApi";
 
-export default function Dashboard({ route }) {
-  // route data
-  const tmail = route.params?.tmail ?? "";
-  const tkey = route.params?.tkey ?? "";
-  const tname = route.params?.tname ?? "";
-  const tphone = route.params?.tphone ?? "";
-  const imail = route.params?.imail ?? "";
-
+export default function Dashboard() {
   // navigation
   const navigation = useNavigation();
 
@@ -38,8 +31,8 @@ export default function Dashboard({ route }) {
 
   // teacher data
   var teacherData = {
-    email: tmail,
-    name: tname,
+    email: "",
+    name: "",
     user: "teacher", // user should be teacher
   };
 
