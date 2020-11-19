@@ -21,7 +21,7 @@ import storage from "@react-native-community/async-storage";
 import MyCard from "../../components/MyCard";
 
 // api
-import TeacherApi from "../../models/teacher/TeacherApi";
+import TeacherApi from "../../api/TeacherApi";
 
 export default function Dashboard() {
   // navigation

@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import storage from "@react-native-community/async-storage";
 
 // api
-import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
 
 export default function Login() {
   // navigation
