@@ -18,26 +18,43 @@ import {
 import React, { useState } from "react";
 import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import storage from "@react-native-community/async-storage";
 
-// API
+// api
 import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function Login() {
+  // navigation
   const navigation = useNavigation();
 
   // data for login
   const [teacherData, setTeacherData] = useState({
-    email: "teacher@gmail.com",
-    password: "12345",
+    email: "teacher@gmail.com", //remove these string afterwards
+    password: "12345", //remove these string afterwards
   });
 
-  const loginTeacher = async (e) => {
+  const loginTeacher = async () => {
     try {
-      const res1 = await TeacherApi.login(teacherData);
-      const res2 = await TeacherApi.getTeacherDetails({
-        email: res1.data.email,
-        key: res1.data.key,
+      const { data: loginRes } = await TeacherApi.login(teacherData);
+      const { data: detailsRes } = await TeacherApi.getTeacherDetails({
+        email: loginRes.email,
+        key: loginRes.key,
       });
+      // var Tdata = {
+      //   email: loginRes.email,
+      //   key: loginRes.key,
+      //   institution_email: detailsRes.institution_email,
+      //   name: detailsRes.name,
+      //   phone_number: detailsRes.phone_number,
+      // };
+      // await storage.setItem("tData", JSON.stringify(Tdata));
+      await storage.multiSet([
+        ["tmail", loginRes.email],
+        ["tkey", loginRes.key],
+        ["timail", detailsRes.institution_email],
+        ["tname", detailsRes.name],
+        ["tphone", detailsRes.phone_number],
+      ]);
       navigation.navigate("thome");
     } catch (error) {
       console.log(error);

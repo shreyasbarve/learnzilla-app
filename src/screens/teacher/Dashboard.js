@@ -15,11 +15,12 @@ import {
 } from "native-base";
 import React, { useState, useEffect } from "react";
 import { BackHandler, TouchableOpacity } from "react-native";
+import storage from "@react-native-community/async-storage";
 
 // components
 import MyCard from "../../components/MyCard";
 
-// API
+// api
 import TeacherApi from "../../models/teacher/TeacherApi";
 
 export default function Dashboard() {
@@ -30,15 +31,22 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   // teacher data
-  var teacherData = {
-    email: "teacher@gmail.com",
-    key: "1lcijN$1gEob<Xk",
+  const [teacherData, setTeacherData] = useState({
+    email: "",
+    key: "",
     user: "teacher", // user should be teacher
-  };
+  });
 
   // get all classes
   const [allClass, setAllClass] = useState([]);
   const loadClasses = async () => {
+    const values = await storage.multiGet(["tmail", "tkey"]);
+    const tmail = values[0][1];
+    const tkey = values[1][1];
+    console.log(tmail, tkey);
+    setTeacherData({ ...teacherData, email: tmail, key: tkey });
+
+    console.log(teacherData);
     try {
       const res = await TeacherApi.getClasses(teacherData);
       setAllClass(res.data);
@@ -50,25 +58,33 @@ export default function Dashboard() {
 
   // add class
   const [addClass, setAddClass] = useState({
-    teacher_email: "teachermail", // from login
+    teacher_email: "",
     standard: "",
     section: "",
     subject: "",
-    key: "teacherkey", // from login
+    key: "",
   });
-  const createClass = async () => {
-    // try {
-    //   await TeacherApi.createClass(addClass);
-    //   loadClasses();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const createClass = async (e) => {
+    e.preventDefault();
+    try {
+      await TeacherApi.createClass(addClass);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
-  const handleBack = () => {
-    BackHandler.exitApp();
+  const handleBack = async () => {
+    storage.clear();
+    await TeacherApi.logout({ email: teacherData.email, key: teacherData.key });
     return true;
+  };
+
+  // logout
+  const handleLogout = async () => {
+    storage.clear();
+    await TeacherApi.logout({ email: teacherData.email, key: teacherData.key });
+    navigation.navigate("tauth");
   };
 
   useEffect(() => {
@@ -89,7 +105,7 @@ export default function Dashboard() {
         <Container>
           <Header>
             <Left>
-              <Button transparent>
+              <Button transparent onPress={handleLogout}>
                 <Icon name="ios-exit" />
               </Button>
             </Left>

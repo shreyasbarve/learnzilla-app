@@ -19,8 +19,8 @@ import {
 import React, { useState } from "react";
 import { BackHandler } from "react-native";
 
-// API
-import TeacherApi from "../../../models/teacher/TeacherApi";
+// api
+// import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function SignUp() {
   // navigation
@@ -37,12 +37,12 @@ export default function SignUp() {
 
   // signup
   const signUpTeacher = async () => {
-    try {
-      await TeacherApi.register(teacherData);
-    } catch (error) {
-      console.log(error);
-    }
-    navigation.navigate("tlogin");
+    // try {
+    //   await TeacherApi.register(teacherData);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // navigation.navigate("tlogin");
   };
 
   return (

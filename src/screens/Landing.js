@@ -9,9 +9,9 @@ export default function Landing() {
     "https://community-cdn-digitalocean-com.global.ssl.fastly.net/variants/tUUE7fdHJPYvQGABUcNKLF6d/035575f2985fe451d86e717d73691e533a1a00545d7230900ed786341dc3c882";
 
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate("tauth");
-    }, 500);
+    // setTimeout(() => {
+    // }, 500);
+    navigation.navigate("tauth");
   }, []);
 
   return (

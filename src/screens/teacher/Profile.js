@@ -17,7 +17,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { BackHandler } from "react-native";
-import TeacherApi from "../../models/teacher/TeacherApi";
+import storage from "@react-native-community/async-storage";
+
+// api
+// import TeacherApi from "../../models/teacher/TeacherApi";
 
 export default function Profile() {
   // navigation
@@ -25,14 +28,13 @@ export default function Profile() {
 
   // change password
   const [teacherData, setTeacherData] = useState({
-    name: "teachername", // from login
-    email: "teacheremail", // from login
+    name: "name", // from login
+    email: "email", // from login
     password: "",
     newpass: "",
-    key: "teacherkey", // from login
+    key: "key", // from login
   });
   const changePassword = async () => {
-    console.log(teacherData);
     // try {
     //   await TeacherApi.changePassword(teacherData, "Teacher Name from login");
     // } catch (error) {
@@ -79,12 +81,12 @@ export default function Profile() {
         >
           <Item stackedLabel>
             <Label>Name</Label>
-            <Input disabled value={teacherData.name} />
+            <Input disabled value={"from login"} />
           </Item>
 
           <Item stackedLabel>
             <Label>Email</Label>
-            <Input disabled value={teacherData.email} />
+            <Input disabled value={"from login"} />
           </Item>
 
           <Item stackedLabel>

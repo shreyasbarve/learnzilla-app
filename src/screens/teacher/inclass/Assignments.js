@@ -15,8 +15,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 
-// API
-import TeacherApi from "../../../models/teacher/TeacherApi";
+// api
+// import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function Assignments() {
   //navigation
@@ -25,12 +25,12 @@ export default function Assignments() {
   // get assignments
   const [assignments, setAssignments] = useState([]);
   const getAssignments = async () => {
-    try {
-      const res = await TeacherApi.getAssignments("classId");
-      setAssignments(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const res = await TeacherApi.getAssignments("classId");
+    //   setAssignments(res.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // if harware back button pressed

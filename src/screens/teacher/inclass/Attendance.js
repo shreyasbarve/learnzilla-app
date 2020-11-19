@@ -15,8 +15,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 
-// API
-import TeacherApi from "../../../models/teacher/TeacherApi";
+// api
+// import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function Attendance() {
   // navigation
@@ -25,12 +25,12 @@ export default function Attendance() {
   // get attendance
   const [attendance, setAttendance] = useState([]);
   const getAttendance = async () => {
-    try {
-      const res = await TeacherApi.getAttendance("classId");
-      setAttendance(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const res = await TeacherApi.getAttendance("classId");
+    //   setAttendance(res.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // if harware back button pressed

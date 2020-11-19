@@ -15,8 +15,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 
-// API
-import TeacherApi from "../../../models/teacher/TeacherApi";
+// api
+// import TeacherApi from "../../../models/teacher/TeacherApi";
 
 export default function Students() {
   // navigation
@@ -25,15 +25,15 @@ export default function Students() {
   // get students
   const [students, setStudents] = useState([]);
   const getStudents = async () => {
-    try {
-      const res = await TeacherApi.getStudents(
-        { email: "from login", password: "from login" },
-        "classId"
-      );
-      setStudents(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const res = await TeacherApi.getStudents(
+    //     { email: "from login", password: "from login" },
+    //     "classId"
+    //   );
+    //   setStudents(res.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // add student
@@ -45,12 +45,12 @@ export default function Students() {
   });
   const addStudent = async () => {
     console.log(studentData);
-    try {
-      await TeacherApi.addStudent(studentData);
-      getStudents();
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await TeacherApi.addStudent(studentData);
+    //   getStudents();
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // if harware back button pressed

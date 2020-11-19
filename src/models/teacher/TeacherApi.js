@@ -4,7 +4,7 @@ const CLASS_URL = "https://learnzilla.herokuapp.com/classroom";
 const TEACHER_URL = "https://learnzilla.herokuapp.com/teacher";
 
 const TeacherApi = {
-  // Login and Register
+  // Login and Register and logout
   register: async (payload) => {
     return await axios.post(`${TEACHER_URL}/register/`, payload);
   },
@@ -13,6 +13,9 @@ const TeacherApi = {
   },
   getTeacherDetails: async (payload) => {
     return await axios.post(`${TEACHER_URL}/`, payload);
+  },
+  logout: async (payload) => {
+    return await axios.post(`${TEACHER_URL}/logout/`, payload);
   },
 
   // HomePage
@@ -24,6 +27,7 @@ const TeacherApi = {
   },
 
   // Inside Class
+  // Assignments
   getAssignments: async (classId) => {
     return await axios.get(`${CLASS_URL}/viewassignments/${classId}/`);
   },
@@ -31,6 +35,7 @@ const TeacherApi = {
     return await axios.post(`${CLASS_URL}/create-new-assign/`, payload);
   },
 
+  // Marks
   getMarks: async (classId) => {
     return await axios.get(`${CLASS_URL}/viewmarks/classroomid/${classId}/`);
   },
@@ -38,6 +43,7 @@ const TeacherApi = {
     return await axios.post(`${CLASS_URL}/addmarks/`, payload);
   },
 
+  // Students
   getStudents: async (payload, classId) => {
     return await axios.post(`${CLASS_URL}/viewstudents/${classId}/`, payload);
   },
@@ -45,6 +51,7 @@ const TeacherApi = {
     return await axios.post(`${CLASS_URL}/addstudent/`, payload);
   },
 
+  // Attendance
   getAttendance: async (classId) => {
     return await axios.get(`${CLASS_URL}/viewattendance/${classId}`);
   },
