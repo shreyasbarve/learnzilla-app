@@ -53,7 +53,6 @@ export default function Students() {
   };
 
   const addStudent = async () => {
-    console.log(studentData);
     try {
       await TeacherApi.addStudent(studentData);
       getStudents();

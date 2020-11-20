@@ -1,21 +1,14 @@
 // core
+import React, { useState, useEffect } from "react";
 import {
-  Container,
-  Header,
-  Form,
-  Item,
-  Input,
-  Label,
-  Body,
-  Title,
-  Right,
-  Button,
+  View,
   Text,
-  Icon,
-  Thumbnail,
-  Content,
-} from "native-base";
-import React, { useEffect, useState } from "react";
+  TouchableOpacity,
+  TextInput,
+  Platform,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
 import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import storage from "@react-native-community/async-storage";
@@ -23,17 +16,27 @@ import storage from "@react-native-community/async-storage";
 // api
 import TeacherApi from "../../../api/TeacherApi";
 
+// animations
+import * as Animatable from "react-native-animatable";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
+import { useTheme } from "react-native-paper";
+
 export default function Login() {
+  // theme
+  const { colors } = useTheme();
+
   // navigation
   const navigation = useNavigation();
 
   // data for login
   const [teacherData, setTeacherData] = useState({
-    email: "teacher@gmail.com", //remove these string afterwards
-    password: "12345", //remove these string afterwards
+    email: "",
+    password: "",
   });
 
   const loginTeacher = async () => {
+    console.log(teacherData);
     try {
       const { data: loginRes } = await TeacherApi.login(teacherData);
       const { data: detailsRes } = await TeacherApi.details({
@@ -55,7 +58,7 @@ export default function Login() {
 
   // goback
   const handleBack = () => {
-    navigation.navigate("landing");
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -66,72 +69,189 @@ export default function Login() {
   }, []);
 
   return (
-    <Container>
-      <Header noLeft>
-        <Body>
-          <Title>Login Page</Title>
-        </Body>
-        <Right>
-          <Button transparent iconLeft onPress={handleBack}>
-            <Icon name="ios-exit" />
-            <Text>Exit</Text>
-          </Button>
-        </Right>
-      </Header>
-      <Content>
-        <Thumbnail
-          large
-          source={{
-            uri:
-              "https://facebook.github.io/react-native/docs/assets/favicon.png",
-          }}
-          style={{
-            alignSelf: "center",
-            marginTop: 30,
-          }}
-        />
-
-        <Form
-          style={{
-            marginTop: 30,
-            marginLeft: 20,
-            marginRight: 20,
-            marginBottom: 30,
-            elevation: 3,
-            borderStyle: "solid",
-            padding: 20,
-          }}
+    <View style={styles.container}>
+      <StatusBar backgroundColor="#009387" barStyle="light-content" />
+      <View style={styles.header}>
+        <Text style={styles.text_header}>Welcome Back!</Text>
+      </View>
+      <Animatable.View
+        animation="fadeInUpBig"
+        style={[
+          styles.footer,
+          {
+            backgroundColor: colors.background,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              color: colors.text,
+            },
+          ]}
         >
-          <Item stackedLabel>
-            <Label>Email Address</Label>
-            <Input
-              keyboardType="email-address"
-              value={teacherData.email}
-              onChangeText={(e) => setTeacherData({ ...teacherData, email: e })}
-            />
-          </Item>
+          Email
+        </Text>
+        <View style={styles.action}>
+          <FontAwesome name="user-o" color={colors.text} size={20} />
+          <TextInput
+            placeholder="Your Email"
+            placeholderTextColor="#666666"
+            style={[
+              styles.textInput,
+              {
+                color: colors.text,
+              },
+            ]}
+            autoCapitalize="none"
+            value={teacherData.email}
+            onChangeText={(e) => setTeacherData({ ...teacherData, email: e })}
+          />
+        </View>
 
-          <Item stackedLabel>
-            <Label>Password</Label>
-            <Input
-              keyboardType="default"
-              secureTextEntry={true}
-              value={teacherData.password}
-              onChangeText={(e) =>
-                setTeacherData({ ...teacherData, password: e })
-              }
-            />
-          </Item>
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              color: colors.text,
+              marginTop: 35,
+            },
+          ]}
+        >
+          Password
+        </Text>
+        <View style={styles.action}>
+          <Feather name="lock" color={colors.text} size={20} />
+          <TextInput
+            placeholder="Your Password"
+            placeholderTextColor="#666666"
+            autoCapitalize="none"
+            onChangeText={(e) =>
+              setTeacherData({ ...teacherData, password: e })
+            }
+            value={teacherData.password}
+          />
+        </View>
 
-          <Button
+        <View style={styles.button}>
+          <TouchableOpacity
             onPress={loginTeacher}
-            rounded
-            style={{ alignSelf: "center", marginTop: 40 }}
+            style={[
+              styles.signIn,
+              {
+                borderColor: "#009387",
+                backgroundColor: "#009387",
+                borderWidth: 1,
+              },
+            ]}
           >
-            <Text>Log In</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: "#FFFFFF",
+                },
+              ]}
+            >
+              Sign In
+            </Text>
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity
+            // onPress={loginTeacher}
+            style={[
+              styles.signIn,
+              {
+                borderColor: "#009387",
+                borderWidth: 1,
+                marginTop: 15,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: "#009387",
+                },
+              ]}
+            >
+              Sign Up
+            </Text>
+          </TouchableOpacity> */}
+        </View>
+      </Animatable.View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#009387",
+    width: "100%",
+  },
+  header: {
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingHorizontal: 20,
+    paddingBottom: 50,
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  text_header: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+  text_footer: {
+    color: "#05375a",
+    fontSize: 18,
+  },
+  action: {
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 5,
+  },
+  actionError: {
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#FF0000",
+    paddingBottom: 5,
+  },
+  textInput: {
+    flex: 1,
+    marginTop: Platform.OS === "ios" ? 0 : -12,
+    paddingLeft: 10,
+    color: "#05375a",
+  },
+  errorMsg: {
+    color: "#FF0000",
+    fontSize: 14,
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 50,
+  },
+  signIn: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+});

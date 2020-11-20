@@ -14,32 +14,55 @@ import {
   Icon,
   Content,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { BackHandler } from "react-native";
 import storage from "@react-native-community/async-storage";
 
 // api
-// import TeacherApi from "../../models/teacher/TeacherApi";
+import TeacherApi from "../../api/TeacherApi";
 
 export default function Profile() {
   // navigation
   const navigation = useNavigation();
 
+  const setData = async () => {
+    try {
+      const values = await storage.multiGet([
+        "tname",
+        "tmail",
+        "tkey",
+        "tphone",
+        "timail",
+      ]);
+      teacherData.name = values[0][1];
+      teacherData.email = values[1][1];
+      teacherData.key = values[2][1];
+      // teacherPhone = values[3][1];
+      // institutionMail = values[4][1];
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // change password
-  const [teacherData, setTeacherData] = useState({
-    name: "name", // from login
-    email: "email", // from login
+  let [teacherData, setTeacherData] = React.useState({
+    name: "",
+    email: "",
     password: "",
     newpass: "",
-    key: "key", // from login
+    key: "",
   });
+
+  // let teacherPhone = "";
+  // let institutionMail = "";
+
   const changePassword = async () => {
-    // try {
-    //   await TeacherApi.changePassword(teacherData, "Teacher Name from login");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await TeacherApi.changePassword(teacherData, teacherData.name);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
@@ -82,23 +105,23 @@ export default function Profile() {
         >
           <Item stackedLabel>
             <Label>Name</Label>
-            <Input disabled value={"from login"} />
+            <Input disabled value={teacherData.name} />
           </Item>
 
           <Item stackedLabel>
             <Label>Email</Label>
-            <Input disabled value={"from login"} />
+            <Input disabled value={teacherData.email} />
           </Item>
 
-          <Item stackedLabel>
+          {/* <Item stackedLabel>
             <Label>Mobile</Label>
-            <Input value={"from login"} />
+            <Input disabled value={teacherPhone} />
           </Item>
 
           <Item stackedLabel>
             <Label>Institution Email</Label>
-            <Input disabled value={"from login"} />
-          </Item>
+            <Input disabled value={institutionMail} />
+          </Item> */}
 
           <Item stackedLabel>
             <Label>Old Password</Label>
@@ -123,7 +146,7 @@ export default function Profile() {
           </Item>
 
           <Button
-            onPress={() => navigation.navigate("Home")}
+            onPress={changePassword}
             rounded
             style={{ alignSelf: "center", marginTop: 40 }}
           >

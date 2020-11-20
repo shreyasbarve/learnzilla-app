@@ -32,7 +32,6 @@ export default function Attendance() {
     try {
       const values = await storage.multiGet(["classid"]);
       const res = await TeacherApi.getAttendance(values[0][1]);
-      console.log(res.data);
       setAttendance(res.data);
     } catch (error) {
       console.log(error);

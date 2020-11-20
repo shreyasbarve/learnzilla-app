@@ -1,5 +1,5 @@
 // core
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -37,7 +37,7 @@ export default function Landing() {
   };
 
   useEffect(() => {
-    BackHandlerr.addEventListener("hardwareBackPress", handleBack);
+    BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
     };
@@ -54,28 +54,28 @@ export default function Landing() {
             <Swiper autoplay height={200}>
               <View style={styles.slide}>
                 <Image
-                  source={require("../../../assets/swipper1.png")}
+                  source={require("../../assets/swipper1.png")}
                   resizeMode="cover"
                   style={styles.sliderImage}
                 />
               </View>
               <View style={styles.slide}>
                 <Image
-                  source={require("../../../assets/swipper5.png")}
+                  source={require("../../assets/swipper5.png")}
                   resizeMode="cover"
                   style={styles.sliderImage}
                 />
               </View>
               <View style={styles.slide}>
                 <Image
-                  source={require("../../../assets/swipper2.png")}
+                  source={require("../../assets/swipper2.png")}
                   resizeMode="cover"
                   style={styles.sliderImage}
                 />
               </View>
               <View style={styles.slide}>
                 <Image
-                  source={require("../../../assets/swipper4.png")}
+                  source={require("../../assets/swipper4.png")}
                   resizeMode="cover"
                   style={styles.sliderImage}
                 />
@@ -86,7 +86,7 @@ export default function Landing() {
             <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
               <View style={styles.categoryIcon}>
                 <Image
-                  source={require("../../../assets/feature3.png")}
+                  source={require("../../assets/feature3.png")}
                   resizeMode="cover"
                   style={styles.feature}
                 />
@@ -96,7 +96,7 @@ export default function Landing() {
             <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
               <View style={styles.categoryIcon}>
                 <Image
-                  source={require("../../../assets/interaction.png")}
+                  source={require("../../assets/interaction.png")}
                   resizeMode="cover"
                   style={styles.feature}
                 />
@@ -106,7 +106,7 @@ export default function Landing() {
             <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
               <View style={styles.categoryIcon}>
                 <Image
-                  source={require("../../../assets/progress.png")}
+                  source={require("../../assets/progress.png")}
                   resizeMode="cover"
                   style={styles.feature}
                 />
@@ -200,7 +200,7 @@ export default function Landing() {
             </View>
             <View style={styles.teamIcon}>
               <Image
-                source={require("../../../assets/aditya.png")}
+                source={require("../../assets/aditya.png")}
                 resizeMode="cover"
                 style={styles.teamImage}
               />

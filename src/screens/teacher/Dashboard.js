@@ -80,8 +80,15 @@ export default function Dashboard() {
 
   // logout
   const handleLogout = async () => {
-    storage.clear();
-    await TeacherApi.logout({ email: teacherData.email, key: teacherData.key });
+    try {
+      await storage.clear();
+      await TeacherApi.logout({
+        email: teacherData.email,
+        key: teacherData.key,
+      });
+    } catch (error) {
+      console.log(error);
+    }
     navigation.navigate("tauth");
   };
 
