@@ -27,27 +27,24 @@ export default function Dashboard() {
   // navigation
   const navigation = useNavigation();
 
-  // if get all classes display
-  const [loading, setLoading] = useState(true);
-
-  // teacher data
-  const [teacherData, setTeacherData] = useState({
+  let teacherData = {
     email: "",
     key: "",
-    user: "teacher", // user should be teacher
-  });
+    user: "teacher",
+  };
+
+  // if get all classes display
+  const [loading, setLoading] = useState(true);
 
   // get all classes
   const [allClass, setAllClass] = useState([]);
   const loadClasses = async () => {
-    const values = await storage.multiGet(["tmail", "tkey"]);
-    const tmail = values[0][1];
-    const tkey = values[1][1];
-    console.log(tmail, tkey);
-    setTeacherData({ ...teacherData, email: tmail, key: tkey });
-
-    console.log(teacherData);
     try {
+      const values = await storage.multiGet(["tmail", "tkey"]);
+      teacherData.email = values[0][1];
+      teacherData.key = values[1][1];
+      addClass.teacher_email = values[0][1];
+      addClass.key = values[1][1];
       const res = await TeacherApi.getClasses(teacherData);
       setAllClass(res.data);
       setLoading(false);
@@ -57,13 +54,14 @@ export default function Dashboard() {
   };
 
   // add class
-  const [addClass, setAddClass] = useState({
+  let addClass = {
     teacher_email: "",
     standard: "",
     section: "",
     subject: "",
     key: "",
-  });
+  };
+
   const createClass = async (e) => {
     e.preventDefault();
     try {
@@ -120,22 +118,24 @@ export default function Dashboard() {
           </Header>
           <Content>
             <TouchableOpacity onPress={() => navigation.navigate("tclass")}>
-              {allClass.map((classData) => (
+              {allClass.map((cData) => (
                 <TouchableOpacity
-                  key={classData.classroom_id}
-                  onPress={() =>
-                    navigation.navigate("InClass", {
-                      classId: classData.classroom_id,
-                    })
-                  }
+                  key={cData.classroom_id}
+                  onPress={async () => {
+                    await storage.setItem(
+                      "classid",
+                      JSON.stringify(cData.classroom_id)
+                    );
+                    navigation.navigate("tclass");
+                  }}
                 >
                   <MyCard
-                    key={classData.classroom_id}
-                    id={classData.classroom_id}
-                    std={classData.standard}
-                    section={classData.section}
-                    subject={classData.subject}
-                    students={classData.strength}
+                    key={cData.classroom_id}
+                    id={cData.classroom_id}
+                    std={cData.standard}
+                    section={cData.section}
+                    subject={cData.subject}
+                    students={cData.strength}
                   />
                 </TouchableOpacity>
               ))}

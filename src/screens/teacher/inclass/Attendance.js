@@ -14,9 +14,13 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
+import storage from "@react-native-community/async-storage";
 
 // api
-// import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
+
+// components
+import MyCard from "../../../components/MyCard";
 
 export default function Attendance() {
   // navigation
@@ -25,12 +29,14 @@ export default function Attendance() {
   // get attendance
   const [attendance, setAttendance] = useState([]);
   const getAttendance = async () => {
-    // try {
-    //   const res = await TeacherApi.getAttendance("classId");
-    //   setAttendance(res.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const values = await storage.multiGet(["classid"]);
+      const res = await TeacherApi.getAttendance(values[0][1]);
+      console.log(res.data);
+      setAttendance(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
@@ -40,7 +46,7 @@ export default function Attendance() {
   };
 
   useEffect(() => {
-    // getAttendance();
+    getAttendance();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
@@ -65,7 +71,16 @@ export default function Attendance() {
         </Right>
       </Header>
       <Content>
-        <Text>Attendance</Text>
+        {attendance.map((aData) => (
+          <MyCard
+            key={aData.name}
+            id={aData.name}
+            std={aData.name}
+            section={""}
+            subject={aData.date.substring(0, 10)}
+            students={aData.attendance_status}
+          />
+        ))}
       </Content>
     </Container>
   );

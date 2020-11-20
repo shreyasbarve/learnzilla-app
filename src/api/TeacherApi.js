@@ -11,7 +11,7 @@ const TeacherApi = {
   login: async (payload) => {
     return await axios.post(`${TEACHER_URL}/login/`, payload);
   },
-  getTeacherDetails: async (payload) => {
+  details: async (payload) => {
     return await axios.post(`${TEACHER_URL}/`, payload);
   },
   logout: async (payload) => {

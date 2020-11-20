@@ -14,9 +14,13 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
+import storage from "@react-native-community/async-storage";
 
 // api
-// import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
+
+// component
+import MyCard from "../../../components/MyCard";
 
 export default function Assignments() {
   //navigation
@@ -25,12 +29,13 @@ export default function Assignments() {
   // get assignments
   const [assignments, setAssignments] = useState([]);
   const getAssignments = async () => {
-    // try {
-    //   const res = await TeacherApi.getAssignments("classId");
-    //   setAssignments(res.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const values = await storage.multiGet(["classid"]);
+      const res = await TeacherApi.getAssignments(values[0][1]);
+      setAssignments(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
@@ -40,7 +45,7 @@ export default function Assignments() {
   };
 
   useEffect(() => {
-    // getAssignments();
+    getAssignments();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
@@ -65,7 +70,16 @@ export default function Assignments() {
         </Right>
       </Header>
       <Content>
-        <Text>Assignments</Text>
+        {assignments.map((aData) => (
+          <MyCard
+            key={aData.title}
+            id={aData.id}
+            std={aData.title}
+            section={""}
+            subject={aData.assign_url}
+            students={aData.date.substring(0, 10)}
+          />
+        ))}
       </Content>
     </Container>
   );

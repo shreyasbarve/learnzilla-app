@@ -14,9 +14,13 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
+import storage from "@react-native-community/async-storage";
 
 // api
-// import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
+
+// component
+import MyCard from "../../../components/MyCard";
 
 export default function Marks() {
   //navigation
@@ -25,12 +29,13 @@ export default function Marks() {
   // get marks
   const [marks, setMarks] = useState([]);
   const getMarks = async () => {
-    // try {
-    //   const res = await TeacherApi.getMarks("classId");
-    //   setMarks(res.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const values = await storage.multiGet(["classid"]);
+      const res = await TeacherApi.getMarks(values[0][1]);
+      setMarks(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
@@ -40,7 +45,7 @@ export default function Marks() {
   };
 
   useEffect(() => {
-    // getMarks();
+    getMarks();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
@@ -65,7 +70,16 @@ export default function Marks() {
         </Right>
       </Header>
       <Content>
-        <Text>Marks</Text>
+        {marks.map((mData) => (
+          <MyCard
+            key={mData.student_name}
+            id={mData.student_name}
+            std={mData.student_name}
+            section={`${mData.mark_obtain}/${mData.total_marks}`}
+            subject={mData.assignment_title}
+            students={mData.assignment_date.substring(0, 10)}
+          />
+        ))}
       </Content>
     </Container>
   );

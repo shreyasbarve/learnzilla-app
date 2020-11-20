@@ -15,7 +15,7 @@ import {
   Thumbnail,
   Content,
 } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import storage from "@react-native-community/async-storage";
@@ -36,18 +36,10 @@ export default function Login() {
   const loginTeacher = async () => {
     try {
       const { data: loginRes } = await TeacherApi.login(teacherData);
-      const { data: detailsRes } = await TeacherApi.getTeacherDetails({
+      const { data: detailsRes } = await TeacherApi.details({
         email: loginRes.email,
         key: loginRes.key,
       });
-      // var Tdata = {
-      //   email: loginRes.email,
-      //   key: loginRes.key,
-      //   institution_email: detailsRes.institution_email,
-      //   name: detailsRes.name,
-      //   phone_number: detailsRes.phone_number,
-      // };
-      // await storage.setItem("tData", JSON.stringify(Tdata));
       await storage.multiSet([
         ["tmail", loginRes.email],
         ["tkey", loginRes.key],
@@ -61,6 +53,18 @@ export default function Login() {
     }
   };
 
+  // goback
+  const handleBack = () => {
+    navigation.navigate("landing");
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBack);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBack);
+    };
+  }, []);
+
   return (
     <Container>
       <Header noLeft>
@@ -68,7 +72,7 @@ export default function Login() {
           <Title>Login Page</Title>
         </Body>
         <Right>
-          <Button transparent iconLeft onPress={() => BackHandler.exitApp()}>
+          <Button transparent iconLeft onPress={handleBack}>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>

@@ -49,6 +49,7 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    setData();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);

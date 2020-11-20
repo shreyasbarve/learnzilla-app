@@ -14,9 +14,13 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
+import storage from "@react-native-community/async-storage";
 
 // api
-// import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
+
+// components
+import MyCard from "../../../components/MyCard";
 
 export default function Students() {
   // navigation
@@ -25,32 +29,37 @@ export default function Students() {
   // get students
   const [students, setStudents] = useState([]);
   const getStudents = async () => {
-    // try {
-    //   const res = await TeacherApi.getStudents(
-    //     { email: "from login", password: "from login" },
-    //     "classId"
-    //   );
-    //   setStudents(res.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const values = await storage.multiGet(["tmail", "tkey", "classid"]);
+      studentData.teacher_email = values[0][1];
+      studentData.classroom_id = values[1][1];
+      studentData.key = values[2][1];
+      const res = await TeacherApi.getStudents(
+        { email: values[0][1], key: values[1][1] },
+        values[2][1]
+      );
+      setStudents(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // add student
-  const [studentData, setStudentData] = useState({
-    teacher_email: "teacheremail", // from login
-    classroom_id: "classid", // from dasshboard
+  let studentData = {
+    teacher_email: "", // from login
+    classroom_id: "", // from dasshboard
     student_email: "",
-    key: "teacherkey", // from login
-  });
+    key: "", // from login
+  };
+
   const addStudent = async () => {
     console.log(studentData);
-    // try {
-    //   await TeacherApi.addStudent(studentData);
-    //   getStudents();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await TeacherApi.addStudent(studentData);
+      getStudents();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // if harware back button pressed
@@ -60,7 +69,7 @@ export default function Students() {
   };
 
   useEffect(() => {
-    // getStudents();
+    getStudents();
     BackHandler.addEventListener("hardwareBackPress", handleBack);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack);
@@ -85,7 +94,15 @@ export default function Students() {
         </Right>
       </Header>
       <Content>
-        <Text>Students</Text>
+        {students.map((sData) => (
+          <MyCard
+            key={sData.student_id}
+            id={sData.student_id}
+            std={sData.student_email}
+            section={sData.student_name}
+            subject={sData.student_phone_no}
+          />
+        ))}
       </Content>
     </Container>
   );
