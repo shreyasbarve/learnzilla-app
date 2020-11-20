@@ -14,6 +14,7 @@ import {
   Icon,
   Thumbnail,
   Content,
+  Toast,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
@@ -47,6 +48,10 @@ export default function Login() {
         ["tname", detailsRes.name],
         ["tphone", detailsRes.phone_number],
       ]);
+      Toast.show({
+        text: "Login Succesful!",
+        buttonText: "Okay",
+      });
       navigation.navigate("thome");
     } catch (error) {
       console.log(error);
@@ -82,12 +87,13 @@ export default function Login() {
         <Thumbnail
           large
           source={{
-            uri:
-              "https://facebook.github.io/react-native/docs/assets/favicon.png",
+            uri: "https://image.flaticon.com/icons/png/512/234/234694.png",
           }}
           style={{
             alignSelf: "center",
             marginTop: 30,
+            height: 150,
+            width: 150,
           }}
         />
 

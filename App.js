@@ -1,6 +1,7 @@
 // core
 import React, { useState } from "react";
 import { AppLoading } from "expo";
+import { Root } from "native-base";
 
 // Fonts
 import * as Font from "expo-font";
@@ -16,7 +17,11 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   if (fontsLoaded) {
-    return <MainNavigator />;
+    return (
+      <Root>
+        <MainNavigator />
+      </Root>
+    );
   } else {
     return (
       <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />

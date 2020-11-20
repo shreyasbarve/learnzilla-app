@@ -100,6 +100,7 @@ export default function Students() {
             std={sData.student_email}
             section={sData.student_name}
             subject={sData.student_phone_no}
+            students={sData.student_id}
           />
         ))}
       </Content>

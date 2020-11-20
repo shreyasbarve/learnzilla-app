@@ -25,7 +25,6 @@ export default function Landing() {
   const login = async () => {
     try {
       const { data } = InstitutionApi.login();
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

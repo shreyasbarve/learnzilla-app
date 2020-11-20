@@ -15,12 +15,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import storage from "@react-native-community/async-storage";
+import { DataTable } from "react-native-paper";
 
 // api
 import TeacherApi from "../../../api/TeacherApi";
-
-// components
-import MyCard from "../../../components/MyCard";
 
 export default function Attendance() {
   // navigation
@@ -70,16 +68,27 @@ export default function Attendance() {
         </Right>
       </Header>
       <Content>
-        {attendance.map((aData) => (
-          <MyCard
-            key={aData.name}
-            id={aData.name}
-            std={aData.name}
-            section={""}
-            subject={aData.date.substring(0, 10)}
-            students={aData.attendance_status}
-          />
-        ))}
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>
+              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Name</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Date</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Status</Text>
+            </DataTable.Title>
+          </DataTable.Header>
+
+          {attendance.map((aData) => (
+            <DataTable.Row>
+              <DataTable.Cell>{aData.name}</DataTable.Cell>
+              <DataTable.Cell>{aData.date.substring(0, 10)}</DataTable.Cell>
+              <DataTable.Cell>{aData.attendance_status}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+        </DataTable>
       </Content>
     </Container>
   );

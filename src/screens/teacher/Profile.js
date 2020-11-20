@@ -28,18 +28,19 @@ export default function Profile() {
 
   const setData = async () => {
     try {
-      const values = await storage.multiGet([
-        "tname",
-        "tmail",
-        "tkey",
-        "tphone",
-        "timail",
-      ]);
-      teacherData.name = values[0][1];
-      teacherData.email = values[1][1];
-      teacherData.key = values[2][1];
-      // teacherPhone = values[3][1];
-      // institutionMail = values[4][1];
+      const values = await storage.multiGet(["tname", "tmail", "tkey"]);
+      setTeacherData({
+        ...teacherData,
+        name: JSON.stringify(values[0][1]).substring(
+          1,
+          values[0][1].length - 1
+        ),
+        email: JSON.stringify(values[1][1]).substring(
+          1,
+          values[1][1].length + 1
+        ),
+        key: values[2][1],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -53,9 +54,6 @@ export default function Profile() {
     newpass: "",
     key: "",
   });
-
-  // let teacherPhone = "";
-  // let institutionMail = "";
 
   const changePassword = async () => {
     try {
@@ -112,16 +110,6 @@ export default function Profile() {
             <Label>Email</Label>
             <Input disabled value={teacherData.email} />
           </Item>
-
-          {/* <Item stackedLabel>
-            <Label>Mobile</Label>
-            <Input disabled value={teacherPhone} />
-          </Item>
-
-          <Item stackedLabel>
-            <Label>Institution Email</Label>
-            <Input disabled value={institutionMail} />
-          </Item> */}
 
           <Item stackedLabel>
             <Label>Old Password</Label>
