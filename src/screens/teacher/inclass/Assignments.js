@@ -135,6 +135,9 @@ export default function Assignments() {
                 </Form>
               </Dialog.Content>
               <Dialog.Actions>
+                <Button transparent onPress={() => setDialog(false)}>
+                  <Text>Cancel</Text>
+                </Button>
                 <Button transparent onPress={createAssignment}>
                   <Text>Create</Text>
                 </Button>

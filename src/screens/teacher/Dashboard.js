@@ -164,6 +164,9 @@ export default function Dashboard() {
                 </Form>
               </Dialog.Content>
               <Dialog.Actions>
+                <Button transparent onPress={() => setDialog(false)}>
+                  <Text>Cancel</Text>
+                </Button>
                 <Button transparent onPress={createClass}>
                   <Text>Add</Text>
                 </Button>

@@ -147,6 +147,9 @@ export default function Students() {
                 </Form>
               </Dialog.Content>
               <Dialog.Actions>
+                <Button transparent onPress={() => setDialog1(false)}>
+                  <Text>Cancel</Text>
+                </Button>
                 <Button transparent onPress={addStudent}>
                   <Text>Add</Text>
                 </Button>
