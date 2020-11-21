@@ -12,6 +12,8 @@ import {
   Text,
   Title,
 } from "native-base";
+import { ProgressBar, Colors } from "react-native-paper";
+
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import storage from "@react-native-community/async-storage";
@@ -20,11 +22,14 @@ import storage from "@react-native-community/async-storage";
 import TeacherApi from "../../../api/TeacherApi";
 
 // component
-import MyCard from "../../../components/MyCard";
+import Card2 from "../../../components/Card2";
 
 export default function Marks() {
   //navigation
   const navigation = useNavigation();
+
+  // if get all marks display
+  const [loading, setLoading] = useState(true);
 
   // get marks
   const [marks, setMarks] = useState([]);
@@ -33,6 +38,7 @@ export default function Marks() {
       const values = await storage.multiGet(["classid"]);
       const res = await TeacherApi.getMarks(values[0][1]);
       setMarks(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -53,34 +59,44 @@ export default function Marks() {
   }, []);
 
   return (
-    <Container>
-      <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("tdashboard")}>
-            <Icon name="md-arrow-round-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Marks</Title>
-        </Body>
-        <Right>
-          <Button transparent hasText>
-            <Text>Add</Text>
-          </Button>
-        </Right>
-      </Header>
-      <Content>
-        {marks.map((mData) => (
-          <MyCard
-            key={mData.student_name}
-            id={mData.student_name}
-            std={mData.student_name}
-            section={`${mData.mark_obtain}/${mData.total_marks}`}
-            subject={mData.assignment_title}
-            students={mData.assignment_date.substring(0, 10)}
-          />
-        ))}
-      </Content>
-    </Container>
+    <>
+      {loading ? (
+        <Container>
+          <ProgressBar indeterminate color={Colors.blue800} />
+        </Container>
+      ) : (
+        <Container>
+          <Header style={{ backgroundColor: "#fff" }}>
+            <Left>
+              <Button
+                dark
+                transparent
+                onPress={() => navigation.navigate("tdashboard")}
+              >
+                <Icon name="md-arrow-round-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Title style={{ color: "#000" }}>Marks</Title>
+            </Body>
+            <Right>
+              <Button transparent hasText>
+                <Text style={{ color: "#000" }}>Add</Text>
+              </Button>
+            </Right>
+          </Header>
+          <Content>
+            {marks.map((mData) => (
+              <Card2
+                title={mData.assignment_title}
+                subtitle={mData.assignment_date.substring(0, 10)}
+                content={`Name: ${mData.student_name}\nMarks: ${mData.mark_obtain}/${mData.total_marks}`}
+                isAction={false}
+              />
+            ))}
+          </Content>
+        </Container>
+      )}
+    </>
   );
 }

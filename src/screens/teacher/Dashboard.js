@@ -10,9 +10,9 @@ import {
   Icon,
   Content,
   Right,
-  Spinner,
   Text,
 } from "native-base";
+import { ProgressBar, Colors } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { BackHandler, TouchableOpacity } from "react-native";
 import storage from "@react-native-community/async-storage";
@@ -104,49 +104,46 @@ export default function Dashboard() {
     <>
       {loading ? (
         <Container>
-          <Spinner color="blue" />
+          <ProgressBar indeterminate color={Colors.blue800} />
         </Container>
       ) : (
         <Container>
-          <Header>
+          <Header style={{ backgroundColor: "#fff" }}>
             <Left>
-              <Button transparent onPress={handleLogout}>
+              <Button dark transparent onPress={handleLogout}>
                 <Icon name="ios-exit" />
               </Button>
             </Left>
             <Body>
-              <Title>Dashboard</Title>
+              <Title style={{ color: "#000" }}>Dashboard</Title>
             </Body>
             <Right>
               <Button transparent hasText onPress={createClass}>
-                <Text>Add Class</Text>
+                <Text style={{ color: "#000" }}>Add Class</Text>
               </Button>
             </Right>
           </Header>
           <Content>
-            <TouchableOpacity onPress={() => navigation.navigate("tclass")}>
-              {allClass.map((cData) => (
-                <TouchableOpacity
-                  key={cData.classroom_id}
-                  onPress={async () => {
-                    await storage.setItem(
-                      "classid",
-                      JSON.stringify(cData.classroom_id)
-                    );
-                    navigation.navigate("tclass");
-                  }}
-                >
-                  <MyCard
-                    key={cData.classroom_id}
-                    id={cData.classroom_id}
-                    std={cData.standard}
-                    section={cData.section}
-                    subject={cData.subject}
-                    students={cData.strength}
-                  />
-                </TouchableOpacity>
-              ))}
-            </TouchableOpacity>
+            {allClass.map((cData) => (
+              <TouchableOpacity
+                key={cData.classroom_id}
+                onPress={async () => {
+                  await storage.setItem(
+                    "classid",
+                    JSON.stringify(cData.classroom_id)
+                  );
+                  navigation.navigate("tclass");
+                }}
+              >
+                <MyCard
+                  id={cData.classroom_id}
+                  std={cData.standard}
+                  section={cData.section}
+                  subject={cData.subject}
+                  students={cData.strength}
+                />
+              </TouchableOpacity>
+            ))}
           </Content>
         </Container>
       )}

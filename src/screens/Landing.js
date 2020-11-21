@@ -160,8 +160,8 @@ export default function Landing() {
               <Button
                 title="Login as Student"
                 color="#e73895"
-                // onPress={() => {}}
                 style={styles.loginButton}
+                onPress={() => navigation.navigate("sauth")}
               />
             </View>
           </View>

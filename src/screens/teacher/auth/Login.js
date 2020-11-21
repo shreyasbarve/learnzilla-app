@@ -30,30 +30,48 @@ export default function Login() {
 
   // data for login
   const [teacherData, setTeacherData] = useState({
-    email: "",
-    password: "",
+    email: "teacher@gmail.com",
+    password: "123456",
   });
 
   const loginTeacher = async () => {
     try {
       const { data: loginRes } = await TeacherApi.login(teacherData);
-      const { data: detailsRes } = await TeacherApi.details({
-        email: loginRes.email,
-        key: loginRes.key,
-      });
-      await storage.multiSet([
-        ["tmail", loginRes.email],
-        ["tkey", loginRes.key],
-        ["timail", detailsRes.institution_email],
-        ["tname", detailsRes.name],
-        ["tphone", detailsRes.phone_number],
-      ]);
-      Toast.show({
-        text: "Login Succesful!",
-        buttonText: "Okay",
-      });
-      navigation.navigate("thome");
+      try {
+        const { data: detailsRes } = await TeacherApi.details({
+          email: loginRes.email,
+          key: loginRes.key,
+        });
+        Toast.show({
+          text: "Login Succesful!",
+          buttonText: "Okay",
+          position: "top",
+          type: "success",
+        });
+        await storage.multiSet([
+          ["tmail", loginRes.email],
+          ["tkey", loginRes.key],
+          ["timail", detailsRes.institution_email],
+          ["tname", detailsRes.name],
+          ["tphone", detailsRes.phone_number],
+        ]);
+        navigation.navigate("thome");
+      } catch (error) {
+        Toast.show({
+          text: "Login Failed!",
+          buttonText: "Okay",
+          position: "top",
+          type: "danger",
+        });
+        console.log(error);
+      }
     } catch (error) {
+      Toast.show({
+        text: "Login Failed!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
       console.log(error);
     }
   };
@@ -72,12 +90,12 @@ export default function Login() {
 
   return (
     <Container>
-      <Header noLeft>
+      <Header noLeft style={{ backgroundColor: "#fff" }}>
         <Body>
-          <Title>Login Page</Title>
+          <Title style={{ color: "#000" }}>Login Page</Title>
         </Body>
         <Right>
-          <Button transparent iconLeft onPress={handleBack}>
+          <Button dark transparent iconLeft onPress={handleBack}>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>

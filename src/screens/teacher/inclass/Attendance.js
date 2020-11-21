@@ -12,6 +12,7 @@ import {
   Text,
   Title,
 } from "native-base";
+import { ProgressBar, Colors } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import storage from "@react-native-community/async-storage";
@@ -24,6 +25,9 @@ export default function Attendance() {
   // navigation
   const navigation = useNavigation();
 
+  // if get all attendance display
+  const [loading, setLoading] = useState(true);
+
   // get attendance
   const [attendance, setAttendance] = useState([]);
   const getAttendance = async () => {
@@ -31,6 +35,7 @@ export default function Attendance() {
       const values = await storage.multiGet(["classid"]);
       const res = await TeacherApi.getAttendance(values[0][1]);
       setAttendance(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -51,45 +56,64 @@ export default function Attendance() {
   }, []);
 
   return (
-    <Container>
-      <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("tdashboard")}>
-            <Icon name="md-arrow-round-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Attendance</Title>
-        </Body>
-        <Right>
-          <Button transparent hasText>
-            <Text>Update</Text>
-          </Button>
-        </Right>
-      </Header>
-      <Content>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>
-              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Name</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={{ fontWeight: "bold", fontSize: 18 }}>Status</Text>
-            </DataTable.Title>
-          </DataTable.Header>
+    <>
+      {loading ? (
+        <Container>
+          <ProgressBar indeterminate color={Colors.blue800} />
+        </Container>
+      ) : (
+        <Container>
+          <Header style={{ backgroundColor: "#fff" }}>
+            <Left>
+              <Button
+                dark
+                transparent
+                onPress={() => navigation.navigate("tdashboard")}
+              >
+                <Icon name="md-arrow-round-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Title style={{ color: "#000" }}>Attendance</Title>
+            </Body>
+            <Right>
+              <Button transparent hasText>
+                <Text style={{ color: "#000" }}>Update</Text>
+              </Button>
+            </Right>
+          </Header>
+          <Content padder>
+            <DataTable style={{ borderWidth: 0.5 }}>
+              <DataTable.Header>
+                <DataTable.Title>
+                  <Text style={{ fontWeight: "bold", fontSize: 18 }}>Name</Text>
+                </DataTable.Title>
+                <DataTable.Title>
+                  <Text style={{ fontWeight: "bold", fontSize: 18 }}>Date</Text>
+                </DataTable.Title>
+                <DataTable.Title>
+                  <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+                    Status
+                  </Text>
+                </DataTable.Title>
+              </DataTable.Header>
 
-          {attendance.map((aData) => (
-            <DataTable.Row>
-              <DataTable.Cell>{aData.name}</DataTable.Cell>
-              <DataTable.Cell>{aData.date.substring(0, 10)}</DataTable.Cell>
-              <DataTable.Cell>{aData.attendance_status}</DataTable.Cell>
-            </DataTable.Row>
-          ))}
-        </DataTable>
-      </Content>
-    </Container>
+              {attendance.map((aData) => (
+                <DataTable.Row
+                  style={{
+                    padding: 20,
+                    borderBottomWidth: 2,
+                  }}
+                >
+                  <DataTable.Cell>{aData.name}</DataTable.Cell>
+                  <DataTable.Cell>{aData.date.substring(0, 10)}</DataTable.Cell>
+                  <DataTable.Cell>{aData.attendance_status}</DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </Content>
+        </Container>
+      )}
+    </>
   );
 }

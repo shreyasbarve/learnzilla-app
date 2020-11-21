@@ -15,12 +15,13 @@ import {
   Icon,
   Thumbnail,
   Content,
+  Toast,
 } from "native-base";
 import React, { useState } from "react";
 import { BackHandler } from "react-native";
 
 // api
-// import TeacherApi from "../../../models/teacher/TeacherApi";
+import TeacherApi from "../../../api/TeacherApi";
 
 export default function SignUp() {
   // navigation
@@ -37,22 +38,39 @@ export default function SignUp() {
 
   // signup
   const signUpTeacher = async () => {
-    // try {
-    //   await TeacherApi.register(teacherData);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // navigation.navigate("tlogin");
+    try {
+      await TeacherApi.register(teacherData);
+      Toast.show({
+        text: "SignUp Succesful!",
+        buttonText: "Okay",
+        position: "top",
+        type: "success",
+      });
+    } catch (error) {
+      Toast.show({
+        text: "SignUp Failed!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
+      console.log(error);
+    }
+    navigation.navigate("tlogin");
   };
 
   return (
     <Container>
-      <Header noLeft>
+      <Header noLeft style={{ backgroundColor: "#fff" }}>
         <Body>
-          <Title>SignUp Page</Title>
+          <Title style={{ color: "#000" }}>SignUp Page</Title>
         </Body>
         <Right>
-          <Button transparent iconLeft onPress={() => BackHandler.exitApp()}>
+          <Button
+            dark
+            transparent
+            iconLeft
+            onPress={() => BackHandler.exitApp()}
+          >
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>

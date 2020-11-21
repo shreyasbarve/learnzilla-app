@@ -79,14 +79,18 @@ export default function Profile() {
 
   return (
     <Container>
-      <Header>
+      <Header style={{ backgroundColor: "#fff" }}>
         <Left>
-          <Button transparent onPress={() => navigation.navigate("tdashboard")}>
+          <Button
+            dark
+            transparent
+            onPress={() => navigation.navigate("tdashboard")}
+          >
             <Icon name="md-arrow-round-back" />
           </Button>
         </Left>
         <Body>
-          <Title>Profile</Title>
+          <Title style={{ color: "#000" }}>Profile</Title>
         </Body>
       </Header>
       <Content>

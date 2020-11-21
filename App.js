@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { AppLoading } from "expo";
 import { Root } from "native-base";
+import { Provider as PaperProvider } from "react-native-paper";
 
 // Fonts
 import * as Font from "expo-font";
@@ -19,7 +20,9 @@ export default function App() {
   if (fontsLoaded) {
     return (
       <Root>
-        <MainNavigator />
+        <PaperProvider>
+          <MainNavigator />
+        </PaperProvider>
       </Root>
     );
   } else {

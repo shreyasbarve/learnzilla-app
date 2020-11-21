@@ -11,7 +11,7 @@ export default function MyCard({ id, std, section, subject, students }) {
         marginRight: 20,
       }}
     >
-      <CardItem>
+      <CardItem header>
         <Body>
           <Text>
             {std} {section}
@@ -19,9 +19,10 @@ export default function MyCard({ id, std, section, subject, students }) {
           <Text note>{subject}</Text>
         </Body>
       </CardItem>
+
       <CardItem>
         <Left>
-          <Button transparent textStyle={{ color: "#87838B" }}>
+          <Button transparent hasText textStyle={{ color: "#87838B" }}>
             <Icon name="md-people" />
             <Text>{students}</Text>
           </Button>

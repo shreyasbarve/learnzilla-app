@@ -6,10 +6,13 @@ const STUDENT_URL = "https://learnzilla.herokuapp.com/student";
 const StudentApi = {
   // Login and Register
   register: async (payload) => {
-    return await axios.post(`${STUDENT_URL}/register`, payload);
+    return await axios.post(`${STUDENT_URL}/register/`, payload);
   },
   login: async (payload) => {
-    return await axios.post(`${STUDENT_URL}/login`, payload);
+    return await axios.post(`${STUDENT_URL}/login/`, payload);
+  },
+  logout: async (payload) => {
+    return await axios.post(`${STUDENT_URL}/logout/`, payload);
   },
   getStudentDetails: async (payload) => {
     return await axios.post(`${STUDENT_URL}/`, payload);
@@ -17,7 +20,7 @@ const StudentApi = {
 
   // HomePage
   getClasses: async (payload) => {
-    return await axios.post(`${CLASS_URL}/`, payload[0]);
+    return await axios.post(`${CLASS_URL}/`, payload);
   },
 
   // Inside Class
@@ -29,10 +32,10 @@ const StudentApi = {
     return await axios.get(`${CLASS_URL}/viewmarks/studentid/${studentid}/`);
   },
 
-  getStudents: async (classId, payload) => {
+  getStudents: async (payload, classId) => {
     return await axios.post(
       `${CLASS_URL}/viewstudents/${classId}/`,
-      payload[0]
+      payload
     );
   },
 

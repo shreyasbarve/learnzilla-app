@@ -12,19 +12,31 @@ import {
   Text,
   Title,
 } from "native-base";
+import {
+  ProgressBar,
+  Colors,
+  Paragraph,
+  Dialog,
+  Portal,
+} from "react-native-paper";
 import React, { useEffect, useState } from "react";
-import { BackHandler } from "react-native";
+import { DataTable } from "react-native-paper";
+import { BackHandler, TouchableOpacity } from "react-native";
 import storage from "@react-native-community/async-storage";
 
 // api
 import TeacherApi from "../../../api/TeacherApi";
 
-// components
-import MyCard from "../../../components/MyCard";
-
 export default function Students() {
   // navigation
   const navigation = useNavigation();
+
+  // if get all students display
+  const [loading, setLoading] = useState(true);
+
+  // Dialog
+  const [dialog, setDialog] = useState(false);
+  const [dInfo, setDInfo] = useState({});
 
   // get students
   const [students, setStudents] = useState([]);
@@ -39,6 +51,7 @@ export default function Students() {
         values[2][1]
       );
       setStudents(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -46,10 +59,10 @@ export default function Students() {
 
   // add student
   let studentData = {
-    teacher_email: "", // from login
-    classroom_id: "", // from dasshboard
+    teacher_email: "",
+    classroom_id: "",
     student_email: "",
-    key: "", // from login
+    key: "",
   };
 
   const addStudent = async () => {
@@ -76,34 +89,85 @@ export default function Students() {
   }, []);
 
   return (
-    <Container>
-      <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("tdashboard")}>
-            <Icon name="md-arrow-round-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Students</Title>
-        </Body>
-        <Right>
-          <Button transparent hasText>
-            <Text>Add Student</Text>
-          </Button>
-        </Right>
-      </Header>
-      <Content>
-        {students.map((sData) => (
-          <MyCard
-            key={sData.student_id}
-            id={sData.student_id}
-            std={sData.student_email}
-            section={sData.student_name}
-            subject={sData.student_phone_no}
-            students={sData.student_id}
-          />
-        ))}
-      </Content>
-    </Container>
+    <>
+      {loading ? (
+        <Container>
+          <ProgressBar indeterminate color={Colors.blue800} />
+        </Container>
+      ) : (
+        <>
+          <Portal>
+            <Dialog visible={dialog} onDismiss={() => setDialog(false)}>
+              <Dialog.Title>{dInfo.student_name}'s Information</Dialog.Title>
+              <Dialog.Content>
+                <Paragraph>ID: {dInfo.student_id}</Paragraph>
+                <Paragraph>Name: {dInfo.student_name}</Paragraph>
+                <Paragraph>Email: {dInfo.student_email}</Paragraph>
+                <Paragraph>Contact: {dInfo.student_phone_no}</Paragraph>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button transparent onPress={() => setDialog(false)}>
+                  <Text>Close</Text>
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+
+          <Container>
+            <Header style={{ backgroundColor: "#fff" }}>
+              <Left>
+                <Button
+                  dark
+                  transparent
+                  onPress={() => navigation.navigate("tdashboard")}
+                >
+                  <Icon name="md-arrow-round-back" />
+                </Button>
+              </Left>
+              <Body>
+                <Title style={{ color: "#000" }}>Students</Title>
+              </Body>
+              <Right>
+                <Button transparent hasText>
+                  <Text style={{ color: "#000" }}>Add Student</Text>
+                </Button>
+              </Right>
+            </Header>
+            <Content padder>
+              <DataTable style={{ borderWidth: 0.5 }}>
+                <DataTable.Header>
+                  <DataTable.Title>
+                    <Text style={{ fontWeight: "bold", fontSize: 18 }}>ID</Text>
+                  </DataTable.Title>
+                  <DataTable.Title>
+                    <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+                      NAME
+                    </Text>
+                  </DataTable.Title>
+                </DataTable.Header>
+                {students.map((sData) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDInfo(sData);
+                      setDialog(true);
+                    }}
+                  >
+                    <DataTable.Row
+                      style={{
+                        padding: 20,
+                        borderBottomWidth: 2,
+                      }}
+                    >
+                      <DataTable.Cell>{sData.student_id}</DataTable.Cell>
+                      <DataTable.Cell>{sData.student_name}</DataTable.Cell>
+                    </DataTable.Row>
+                  </TouchableOpacity>
+                ))}
+              </DataTable>
+            </Content>
+          </Container>
+        </>
+      )}
+    </>
   );
 }

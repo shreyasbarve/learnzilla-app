@@ -12,6 +12,7 @@ import {
   Text,
   Title,
 } from "native-base";
+import { ProgressBar, Colors } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import storage from "@react-native-community/async-storage";
@@ -20,11 +21,14 @@ import storage from "@react-native-community/async-storage";
 import TeacherApi from "../../../api/TeacherApi";
 
 // component
-import MyCard from "../../../components/MyCard";
+import Card2 from "../../../components/Card2";
 
 export default function Assignments() {
   //navigation
   const navigation = useNavigation();
+
+  // if get all assignmets display
+  const [loading, setLoading] = useState(true);
 
   // get assignments
   const [assignments, setAssignments] = useState([]);
@@ -33,6 +37,7 @@ export default function Assignments() {
       const values = await storage.multiGet(["classid"]);
       const res = await TeacherApi.getAssignments(values[0][1]);
       setAssignments(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -53,34 +58,44 @@ export default function Assignments() {
   }, []);
 
   return (
-    <Container>
-      <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("tdashboard")}>
-            <Icon name="md-arrow-round-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Assignments</Title>
-        </Body>
-        <Right>
-          <Button transparent hasText>
-            <Text>Add</Text>
-          </Button>
-        </Right>
-      </Header>
-      <Content>
-        {assignments.map((aData) => (
-          <MyCard
-            key={aData.title}
-            id={aData.id}
-            std={aData.title}
-            section={""}
-            subject={aData.assign_url}
-            students={aData.date.substring(0, 10)}
-          />
-        ))}
-      </Content>
-    </Container>
+    <>
+      {loading ? (
+        <Container>
+          <ProgressBar indeterminate color={Colors.blue800} />
+        </Container>
+      ) : (
+        <Container>
+          <Header style={{ backgroundColor: "#fff" }}>
+            <Left>
+              <Button
+                dark
+                transparent
+                onPress={() => navigation.navigate("tdashboard")}
+              >
+                <Icon name="md-arrow-round-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Title style={{ color: "#000" }}>Assignments</Title>
+            </Body>
+            <Right>
+              <Button transparent hasText>
+                <Text style={{ color: "#000" }}>Add</Text>
+              </Button>
+            </Right>
+          </Header>
+          <Content>
+            {assignments.map((aData) => (
+              <Card2
+                title={aData.title}
+                subtitle={aData.date.substring(0, 10)}
+                content={aData.assign_url}
+                isAction={true}
+              />
+            ))}
+          </Content>
+        </Container>
+      )}
+    </>
   );
 }
