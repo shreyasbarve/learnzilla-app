@@ -54,14 +54,14 @@ export default function Assignments() {
 
   return (
     <Container>
-      <Header>
+      <Header style={{ backgroundColor: "#fff" }}>
         <Left>
           <Button transparent onPress={() => navigation.navigate("sdashboard")}>
             <Icon name="md-arrow-round-back" />
           </Button>
         </Left>
         <Body>
-          <Title>Assignments</Title>
+          <Title style={{ color: "#000" }}>Assignments</Title>
         </Body>
       </Header>
       <Content>

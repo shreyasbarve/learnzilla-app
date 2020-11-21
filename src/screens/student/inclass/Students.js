@@ -69,14 +69,18 @@ export default function Students() {
 
   return (
     <Container>
-      <Header>
+      <Header style={{ backgroundColor: "#fff" }}>
         <Left>
-          <Button transparent onPress={() => navigation.navigate("sdashboard")}>
+          <Button
+            dark
+            transparent
+            onPress={() => navigation.navigate("sdashboard")}
+          >
             <Icon name="md-arrow-round-back" />
           </Button>
         </Left>
         <Body>
-          <Title>Students</Title>
+          <Title style={{ color: "#000" }}>Students</Title>
         </Body>
       </Header>
       <Content>

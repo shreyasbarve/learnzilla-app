@@ -52,14 +52,14 @@ export default function Attendance() {
 
   return (
     <Container>
-      <Header>
+      <Header style={{ backgroundColor: "#fff" }}>
         <Left>
           <Button transparent onPress={() => navigation.navigate("sdashboard")}>
             <Icon name="md-arrow-round-back" />
           </Button>
         </Left>
         <Body>
-          <Title>Attendance</Title>
+          <Title style={{ color: "#000" }}>Attendance</Title>
         </Body>
       </Header>
       <Content>

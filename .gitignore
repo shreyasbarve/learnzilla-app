@@ -12,14 +12,4 @@ web-build/
 # macOS
 .DS_Store
 
-# build monitor url
-# https://expo.io/accounts/oathtocode/builds/9096655f-7483-4d1b-8aa0-077a058bf2d9
-
-# check queue
-# https://expo.io/turtle-status
-
-# manifest
-# https://exp.host/@oathtocode/classroom/index.exp?sdkVersion=39.0.0 
-
-# project page
-# https://expo.io/@oathtocode/classroom
+classroom.jks

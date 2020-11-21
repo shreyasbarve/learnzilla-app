@@ -54,14 +54,14 @@ export default function Marks() {
 
   return (
     <Container>
-      <Header>
+      <Header style={{ backgroundColor: "#fff" }}>
         <Left>
           <Button transparent onPress={() => navigation.navigate("sdashboard")}>
             <Icon name="md-arrow-round-back" />
           </Button>
         </Left>
         <Body>
-          <Title>Marks</Title>
+          <Title style={{ color: "#000" }}>Marks</Title>
         </Body>
       </Header>
       <Content>
