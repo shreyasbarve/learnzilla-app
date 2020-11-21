@@ -112,7 +112,7 @@ export default function Assignments() {
         text: "Marks updated!",
         buttonText: "Okay",
         position: "top",
-        type: "danger",
+        type: "success",
       });
     } catch (error) {
       Toast.show({
