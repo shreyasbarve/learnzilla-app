@@ -22,7 +22,7 @@ import {
   TextInput,
 } from "react-native-paper";
 import React, { useEffect, useState } from "react";
-import { BackHandler } from "react-native";
+import { BackHandler, TouchableOpacity } from "react-native";
 import storage from "@react-native-community/async-storage";
 
 // api
@@ -37,6 +37,7 @@ export default function Assignments() {
 
   // Dialog
   const [dialog, setDialog] = useState(false);
+  const [dialog2, setDialog2] = useState(false);
 
   // if get all assignmets display
   const [loading, setLoading] = useState(true);
@@ -49,6 +50,8 @@ export default function Assignments() {
       assignmentData.classroom_id = values[0][1];
       assignmentData.teacher_email = values[1][1];
       assignmentData.key = values[2][1];
+      marks.email = values[1][1];
+      marks.key = values[2][1];
       const res = await TeacherApi.getAssignments(values[0][1]);
       setAssignments(res.data);
       setLoading(false);
@@ -77,6 +80,7 @@ export default function Assignments() {
         position: "top",
         type: "success",
       });
+      setAssignmentData({ ...assignmentData, title: "", assign_url: "" });
     } catch (error) {
       Toast.show({
         text: "Assignment not created!",
@@ -86,6 +90,59 @@ export default function Assignments() {
       });
       console.log(error);
     }
+  };
+
+  // add marks
+  const [tempId, setTempId] = useState("");
+  const [marks, setMarks] = useState({
+    email: "",
+    key: "",
+    list: [],
+  });
+  const [studentData, setStudentData] = useState({
+    assignment_id: "",
+    student_id: "",
+    marksobtain: "",
+    totalmarks: "",
+  });
+  const updateMarks = async () => {
+    try {
+      await TeacherApi.addMarks(marks);
+      Toast.show({
+        text: "Marks updated!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
+    } catch (error) {
+      Toast.show({
+        text: "Marks not updated!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
+      console.log(error);
+    }
+    setStudentData({
+      ...studentData,
+      assignment_id: "",
+      student_id: "",
+      marksobtain: "",
+      totalmarks: "",
+    });
+  };
+  var finalMarks = [];
+  const addStudentMarks = () => {
+    const tempList = finalMarks.concat({
+      assignment_id: tempId,
+      student_id: studentData.student_id,
+      marksobtain: studentData.marksobtain,
+      totalmarks: studentData.totalmarks,
+    });
+    finalMarks = tempList;
+    marks.list = finalMarks;
+    setMarks(marks);
+    setDialog2(false);
   };
 
   // if harware back button pressed
@@ -111,7 +168,7 @@ export default function Assignments() {
       ) : (
         <>
           <Portal>
-            <Dialog visible={dialog} onDismiss={() => setDialog(false)}>
+            <Dialog visible={dialog} onDismiss={() => setDialog2(false)}>
               <Dialog.Title>Create Assignment</Dialog.Title>
               <Dialog.Content>
                 <Form>
@@ -145,6 +202,48 @@ export default function Assignments() {
             </Dialog>
           </Portal>
 
+          <Portal>
+            <Dialog visible={dialog2} onDismiss={() => setDialog2(false)}>
+              <Dialog.Title>Update marks</Dialog.Title>
+              <Dialog.Content>
+                <Form>
+                  <TextInput
+                    mode="outlined"
+                    label="Student ID"
+                    value={studentData.student_id}
+                    onChangeText={(e) =>
+                      setStudentData({ ...studentData, student_id: e })
+                    }
+                  />
+                  <TextInput
+                    mode="outlined"
+                    label="Obtained marks"
+                    value={studentData.marksobtain}
+                    onChangeText={(e) =>
+                      setStudentData({ ...studentData, marksobtain: e })
+                    }
+                  />
+                  <TextInput
+                    mode="outlined"
+                    label="Total marks"
+                    value={studentData.totalmarks}
+                    onChangeText={(e) =>
+                      setStudentData({ ...studentData, totalmarks: e })
+                    }
+                  />
+                </Form>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button transparent onPress={() => setDialog2(false)}>
+                  <Text>Cancel</Text>
+                </Button>
+                <Button transparent onPress={addStudentMarks}>
+                  <Text>Create</Text>
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+
           <Container>
             <Header style={{ backgroundColor: "#fff" }}>
               <Left>
@@ -166,13 +265,29 @@ export default function Assignments() {
               </Right>
             </Header>
             <Content>
+              <Button
+                badge
+                rounded
+                hasText
+                onPress={updateMarks}
+                style={{ alignSelf: "center", marginTop: 10 }}
+              >
+                <Text style={{ color: "#fff" }}>Update Marks of Class</Text>
+              </Button>
               {assignments.map((aData) => (
-                <Card2
-                  title={aData.title}
-                  subtitle={aData.date.substring(0, 10)}
-                  content={aData.assign_url}
-                  isAction={true}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setTempId(`${aData.id}`);
+                    setDialog2(true);
+                  }}
+                >
+                  <Card2
+                    title={`${aData.id} - ${aData.title}`}
+                    subtitle={aData.date.substring(0, 10)}
+                    content={aData.assign_url}
+                    isAction={true}
+                  />
+                </TouchableOpacity>
               ))}
             </Content>
           </Container>

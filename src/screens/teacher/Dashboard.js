@@ -93,6 +93,7 @@ export default function Dashboard() {
       });
       console.log(error);
     }
+    setAddClass({ ...addClass, standard: "", section: "", subject: "" });
   };
 
   // if harware back button pressed

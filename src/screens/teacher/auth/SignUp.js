@@ -61,7 +61,7 @@ export default function SignUp() {
     <Container>
       <Header noLeft style={{ backgroundColor: "#fff" }}>
         <Body>
-          <Title style={{ color: "#000" }}>SignUp Page</Title>
+          <Title style={{ color: "#000" }}>Teacher SignUp</Title>
         </Body>
         <Right>
           <Button dark transparent iconLeft onPress={() => navigation.goBack()}>

@@ -33,7 +33,7 @@ export default function Profile() {
         ...teacherData,
         name: JSON.stringify(values[0][1]).substring(
           1,
-          values[0][1].length - 1
+          values[0][1].length + 1
         ),
         email: JSON.stringify(values[1][1]).substring(
           1,

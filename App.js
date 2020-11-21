@@ -8,6 +8,10 @@ import { Provider as PaperProvider } from "react-native-paper";
 import * as Font from "expo-font";
 import MainNavigator from "./src/routes/MainNavigator";
 
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
+
 const getFonts = async () =>
   await Font.loadAsync({
     Roboto: require("native-base/Fonts/Roboto.ttf"),

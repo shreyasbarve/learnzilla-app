@@ -11,6 +11,7 @@ import {
   Right,
   Text,
   Title,
+  Toast,
 } from "native-base";
 import { ProgressBar, Colors } from "react-native-paper";
 import React, { useEffect, useState } from "react";
@@ -77,7 +78,7 @@ export default function Attendance() {
               <Title style={{ color: "#000" }}>Attendance</Title>
             </Body>
             <Right>
-              <Button transparent hasText>
+              <Button transparent hasText onPress={getAttendance}>
                 <Text style={{ color: "#000" }}>Update</Text>
               </Button>
             </Right>
@@ -101,7 +102,7 @@ export default function Attendance() {
               {attendance.map((aData) => (
                 <DataTable.Row
                   style={{
-                    padding: 20,
+                    padding: 10,
                     borderBottomWidth: 2,
                   }}
                 >

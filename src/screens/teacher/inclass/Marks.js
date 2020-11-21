@@ -11,6 +11,7 @@ import {
   Right,
   Text,
   Title,
+  Toast,
 } from "native-base";
 import { ProgressBar, Colors } from "react-native-paper";
 
@@ -80,8 +81,8 @@ export default function Marks() {
               <Title style={{ color: "#000" }}>Marks</Title>
             </Body>
             <Right>
-              <Button transparent hasText>
-                <Text style={{ color: "#000" }}>Add</Text>
+              <Button transparent hasText onPress={getMarks}>
+                <Text style={{ color: "#000" }}>Update</Text>
               </Button>
             </Right>
           </Header>

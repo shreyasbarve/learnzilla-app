@@ -12,6 +12,7 @@ import {
   Text,
   Title,
   Form,
+  Toast,
 } from "native-base";
 import {
   ProgressBar,
@@ -49,6 +50,8 @@ export default function Students() {
       studentData.teacher_email = values[0][1];
       studentData.key = values[1][1];
       studentData.classroom_id = values[2][1];
+      attendance.email = values[0][1];
+      attendance.key = values[1][1];
       const res = await TeacherApi.getStudents(
         { email: values[0][1], key: values[1][1] },
         values[2][1]
@@ -67,7 +70,6 @@ export default function Students() {
     student_email: "",
     key: "",
   });
-
   const addStudent = async (e) => {
     e.preventDefault();
     try {
@@ -83,6 +85,56 @@ export default function Students() {
     } catch (error) {
       Toast.show({
         text: "Student not added!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
+      console.log(error);
+    }
+    setStudentData({ ...studentData, student_email: "" });
+  };
+
+  // add attendance
+  const [attendance, setAttendance] = useState({
+    email: "",
+    key: "",
+    list: [],
+  });
+  var finalList = [];
+  const markPresent = (sid) => {
+    const templist = finalList.concat({
+      student_id: sid,
+      classroom_id: studentData.classroom_id,
+      attendance: 1,
+    });
+
+    finalList = templist;
+    attendance.list = finalList;
+    setAttendance(attendance);
+  };
+  const markAbsent = (sid) => {
+    const templist = finalList.concat({
+      student_id: sid,
+      classroom_id: studentData.classroom_id,
+      attendance: 0,
+    });
+
+    finalList = templist;
+    attendance.list = finalList;
+    setAttendance(attendance);
+  };
+  const markClass = async () => {
+    try {
+      await TeacherApi.addAttendance(attendance);
+      Toast.show({
+        text: "Attendance updated!",
+        buttonText: "Okay",
+        position: "top",
+        type: "success",
+      });
+    } catch (error) {
+      Toast.show({
+        text: "Attendance not updated!",
         buttonText: "Okay",
         position: "top",
         type: "danger",
@@ -178,7 +230,18 @@ export default function Students() {
               </Right>
             </Header>
             <Content padder>
-              <DataTable style={{ borderWidth: 0.5 }}>
+              <Button
+                badge
+                rounded
+                hasText
+                onPress={markClass}
+                style={{ alignSelf: "center" }}
+              >
+                <Text style={{ color: "#fff" }}>
+                  Update Attendance of class
+                </Text>
+              </Button>
+              <DataTable style={{ borderWidth: 0.5, marginTop: 10 }}>
                 <DataTable.Header>
                   <DataTable.Title>
                     <Text style={{ fontWeight: "bold", fontSize: 18 }}>ID</Text>
@@ -186,6 +249,11 @@ export default function Students() {
                   <DataTable.Title>
                     <Text style={{ fontWeight: "bold", fontSize: 18 }}>
                       NAME
+                    </Text>
+                  </DataTable.Title>
+                  <DataTable.Title>
+                    <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                      ATTENDANCE
                     </Text>
                   </DataTable.Title>
                 </DataTable.Header>
@@ -198,12 +266,31 @@ export default function Students() {
                   >
                     <DataTable.Row
                       style={{
-                        padding: 20,
+                        padding: 10,
                         borderBottomWidth: 2,
                       }}
                     >
                       <DataTable.Cell>{sData.student_id}</DataTable.Cell>
                       <DataTable.Cell>{sData.student_name}</DataTable.Cell>
+                      <DataTable.Cell>
+                        <Button
+                          badge
+                          hasText
+                          success
+                          onPress={() => markPresent(sData.student_id)}
+                        >
+                          <Text style={{ color: "#fff" }}>P</Text>
+                        </Button>
+                        {"   "}
+                        <Button
+                          badge
+                          hasText
+                          danger
+                          onPress={() => markAbsent(sData.student_id)}
+                        >
+                          <Text style={{ color: "#fff" }}>A</Text>
+                        </Button>
+                      </DataTable.Cell>
                     </DataTable.Row>
                   </TouchableOpacity>
                 ))}

@@ -31,7 +31,7 @@ export default function Login() {
   // data for login
   const [teacherData, setTeacherData] = useState({
     email: "teacher@gmail.com",
-    password: "123456",
+    password: "octahacks123",
   });
 
   const loginTeacher = async () => {
@@ -92,7 +92,7 @@ export default function Login() {
     <Container>
       <Header noLeft style={{ backgroundColor: "#fff" }}>
         <Body>
-          <Title style={{ color: "#000" }}>Login Page</Title>
+          <Title style={{ color: "#000" }}>Teacher Login</Title>
         </Body>
         <Right>
           <Button dark transparent iconLeft onPress={handleBack}>
