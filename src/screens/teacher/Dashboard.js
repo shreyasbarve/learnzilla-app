@@ -17,7 +17,6 @@ import {
 import {
   ProgressBar,
   Colors,
-  Paragraph,
   Dialog,
   Portal,
   TextInput,
@@ -73,11 +72,11 @@ export default function Dashboard() {
     subject: "",
     key: "",
   });
-
   const createClass = async (e) => {
     e.preventDefault();
     try {
       await TeacherApi.createClass(addClass);
+      loadClasses();
       setDialog(false);
       Toast.show({
         text: "Class created!",
@@ -86,6 +85,12 @@ export default function Dashboard() {
         type: "success",
       });
     } catch (error) {
+      Toast.show({
+        text: "Class not created!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
       console.log(error);
     }
   };
@@ -136,19 +141,25 @@ export default function Dashboard() {
                     mode="outlined"
                     label="Standard"
                     value={addClass.standard}
-                    onChangeText={(text) => setText(text)}
+                    onChangeText={(e) =>
+                      setAddClass({ ...addClass, standard: e })
+                    }
                   />
                   <TextInput
                     mode="outlined"
                     label="Section"
                     value={addClass.section}
-                    onChangeText={(text) => setText(text)}
+                    onChangeText={(e) =>
+                      setAddClass({ ...addClass, section: e })
+                    }
                   />
                   <TextInput
                     mode="outlined"
                     label="Subject"
                     value={addClass.subject}
-                    onChangeText={(text) => setText(text)}
+                    onChangeText={(e) =>
+                      setAddClass({ ...addClass, subject: e })
+                    }
                   />
                 </Form>
               </Dialog.Content>

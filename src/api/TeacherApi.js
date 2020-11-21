@@ -5,7 +5,7 @@ const TEACHER_URL = "https://learnzilla.herokuapp.com/teacher";
 
 const TeacherApi = {
   // Login and Register and logout
-  register: async (payload) => {
+  signup: async (payload) => {
     return await axios.post(`${TEACHER_URL}/register/`, payload);
   },
   login: async (payload) => {

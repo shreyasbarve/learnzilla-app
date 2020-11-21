@@ -11,6 +11,7 @@ import {
   Right,
   Text,
   Title,
+  Form,
 } from "native-base";
 import {
   ProgressBar,
@@ -18,6 +19,7 @@ import {
   Paragraph,
   Dialog,
   Portal,
+  TextInput,
 } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "react-native-paper";
@@ -36,6 +38,7 @@ export default function Students() {
 
   // Dialog
   const [dialog, setDialog] = useState(false);
+  const [dialog1, setDialog1] = useState(false);
   const [dInfo, setDInfo] = useState({});
 
   // get students
@@ -44,8 +47,8 @@ export default function Students() {
     try {
       const values = await storage.multiGet(["tmail", "tkey", "classid"]);
       studentData.teacher_email = values[0][1];
-      studentData.classroom_id = values[1][1];
-      studentData.key = values[2][1];
+      studentData.key = values[1][1];
+      studentData.classroom_id = values[2][1];
       const res = await TeacherApi.getStudents(
         { email: values[0][1], key: values[1][1] },
         values[2][1]
@@ -58,18 +61,32 @@ export default function Students() {
   };
 
   // add student
-  let studentData = {
+  const [studentData, setStudentData] = useState({
     teacher_email: "",
     classroom_id: "",
     student_email: "",
     key: "",
-  };
+  });
 
-  const addStudent = async () => {
+  const addStudent = async (e) => {
+    e.preventDefault();
     try {
       await TeacherApi.addStudent(studentData);
       getStudents();
+      setDialog1(false);
+      Toast.show({
+        text: "Student added!",
+        buttonText: "Okay",
+        position: "top",
+        type: "success",
+      });
     } catch (error) {
+      Toast.show({
+        text: "Student not added!",
+        buttonText: "Okay",
+        position: "top",
+        type: "danger",
+      });
       console.log(error);
     }
   };
@@ -113,6 +130,30 @@ export default function Students() {
             </Dialog>
           </Portal>
 
+          <Portal>
+            <Dialog visible={dialog1} onDismiss={() => setDialog1(false)}>
+              <Dialog.Title>Add Class</Dialog.Title>
+              <Dialog.Content>
+                <Form>
+                  <TextInput
+                    mode="outlined"
+                    label="Student email"
+                    keyboardType="email-address"
+                    value={studentData.student_email}
+                    onChangeText={(e) =>
+                      setStudentData({ ...studentData, student_email: e })
+                    }
+                  />
+                </Form>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button transparent onPress={addStudent}>
+                  <Text>Add</Text>
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+
           <Container>
             <Header style={{ backgroundColor: "#fff" }}>
               <Left>
@@ -128,7 +169,7 @@ export default function Students() {
                 <Title style={{ color: "#000" }}>Students</Title>
               </Body>
               <Right>
-                <Button transparent hasText>
+                <Button transparent hasText onPress={() => setDialog1(true)}>
                   <Text style={{ color: "#000" }}>Add Student</Text>
                 </Button>
               </Right>

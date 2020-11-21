@@ -18,7 +18,6 @@ import {
   Toast,
 } from "native-base";
 import React, { useState } from "react";
-import { BackHandler } from "react-native";
 
 // api
 import TeacherApi from "../../../api/TeacherApi";
@@ -39,7 +38,7 @@ export default function SignUp() {
   // signup
   const signUpTeacher = async () => {
     try {
-      await TeacherApi.register(teacherData);
+      await TeacherApi.signup(teacherData);
       Toast.show({
         text: "SignUp Succesful!",
         buttonText: "Okay",
@@ -65,12 +64,7 @@ export default function SignUp() {
           <Title style={{ color: "#000" }}>SignUp Page</Title>
         </Body>
         <Right>
-          <Button
-            dark
-            transparent
-            iconLeft
-            onPress={() => BackHandler.exitApp()}
-          >
+          <Button dark transparent iconLeft onPress={() => navigation.goBack()}>
             <Icon name="ios-exit" />
             <Text>Exit</Text>
           </Button>
