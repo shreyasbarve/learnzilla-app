@@ -20,7 +20,7 @@ import storage from "@react-native-community/async-storage";
 import StudentApi from "../../../api/StudentApi";
 
 // component
-import MyCard from "../../../components/MyCard";
+import Card2 from "../../../components/Card2";
 
 export default function Marks() {
   //navigation
@@ -66,10 +66,11 @@ export default function Marks() {
       </Header>
       <Content>
         {marks.map((mData) => (
-          <MyCard
-            std={mData.assignment_title}
-            students={`${mData.mark_obtain}/${mData.total_marks}`}
-            subject={mData.assignment_date.substring(0, 10)}
+          <Card2
+            title={mData.assignment_title}
+            subtitle={mData.assignment_date.substring(0, 10)}
+            content={`Marks: ${mData.mark_obtain}/${mData.total_marks}`}
+            isAction={false}
           />
         ))}
       </Content>

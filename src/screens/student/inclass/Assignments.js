@@ -20,7 +20,7 @@ import storage from "@react-native-community/async-storage";
 import StudentApi from "../../../api/StudentApi";
 
 // component
-import MyCard from "../../../components/MyCard";
+import Card2 from "../../../components/Card2";
 
 export default function Assignments() {
   //navigation
@@ -66,13 +66,11 @@ export default function Assignments() {
       </Header>
       <Content>
         {assignments.map((aData) => (
-          <MyCard
-            key={aData.title}
-            id={aData.id}
-            std={aData.title}
-            section={""}
-            subject={aData.assign_url}
-            students={aData.date.substring(0, 10)}
+          <Card2
+            title={aData.title}
+            subtitle={aData.date.substring(0, 10)}
+            content={aData.assign_url}
+            isAction={true}
           />
         ))}
       </Content>
